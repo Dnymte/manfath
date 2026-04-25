@@ -1,0 +1,7 @@
+p1234
+cمنفذ-server
+Luser
+f20
+tIPv4
+PTCP
+n*:3000

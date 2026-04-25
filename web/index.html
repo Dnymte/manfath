@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manfath — See every port. Kill what you don't need. Share the rest.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="#">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-name" data-i18n="brand">Manfath</span>
+    <span class="brand-ar">منفذ</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features" class="hide-sm" data-i18n="nav.features">Features</a>
+    <a href="#oss" class="hide-sm" data-i18n="nav.oss">Open source</a>
+    <a href="#download" class="hide-sm" data-i18n="nav.download">Download</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="lang-en" class="on" aria-pressed="true">EN</button>
+      <button id="lang-ar" class="ar-btn" aria-pressed="false">ع</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═════════════════ HERO ═════════════════ -->
+<section class="hero">
+  <div class="hero-stage">
+    <div class="hero-copy" id="heroCopy">
+      <span class="hero-eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">v1.0 · Free forever</span></span>
+      <h1 class="hero-title">
+        <span data-i18n="hero.title.line1">See every port.</span><br>
+        <span data-i18n="hero.title.line2">Kill what you don't need.</span><br>
+        <span class="lg-amber" data-i18n="hero.title.line3">Share the rest.</span>
+      </h1>
+      <p class="hero-sub" data-i18n="hero.sub">A free, open-source menu bar app for macOS that shows every localhost port on your machine — with one-click kill and public tunnels built in.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#download">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 13.3c0-2.9 2.3-4.2 2.4-4.3-1.3-1.9-3.4-2.2-4.1-2.2-1.7-.2-3.4 1-4.3 1-.9 0-2.3-1-3.8-1-1.9 0-3.7 1.1-4.7 2.9-2 3.5-.5 8.7 1.4 11.5 1 1.4 2.1 3 3.6 2.9 1.5-.1 2-.9 3.8-.9s2.2.9 3.8.9c1.6 0 2.6-1.4 3.5-2.8 1.1-1.6 1.6-3.2 1.6-3.2-.1 0-3.2-1.2-3.2-4.8zM14.7 5.1c.8-1 1.4-2.4 1.2-3.8-1.2.1-2.6.8-3.4 1.8-.8.9-1.4 2.3-1.2 3.7 1.3.1 2.7-.7 3.4-1.7z"/></svg>
+          <span data-i18n="hero.cta.download">Download for Mac</span>
+        </a>
+        <a class="btn btn-ghost" href="#oss">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+          <span data-i18n="hero.cta.github">View on GitHub</span>
+        </a>
+      </div>
+      <div class="hero-foss" data-i18n="hero.foss">Free and open source. Forever.</div>
+    </div>
+
+    <svg class="hero-svg" id="heroSvg" viewBox="0 0 1400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <!-- wall concrete -->
+        <radialGradient id="wall" cx=".5" cy=".3" r=".9">
+          <stop offset="0" stop-color="#1e1c1f"/>
+          <stop offset=".6" stop-color="#141216"/>
+          <stop offset="1" stop-color="#0a090c"/>
+        </radialGradient>
+        <pattern id="wallGrain" width="3" height="3" patternUnits="userSpaceOnUse">
+          <rect width="3" height="3" fill="transparent"/>
+          <circle cx="1" cy="1" r=".35" fill="#2a262c" opacity=".5"/>
+          <circle cx="2.2" cy="2.4" r=".25" fill="#3a353c" opacity=".3"/>
+        </pattern>
+
+        <!-- faceplate ivory -->
+        <linearGradient id="ivory" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#efe9d9"/>
+          <stop offset=".5" stop-color="#e0d9c6"/>
+          <stop offset="1" stop-color="#b8b0a0"/>
+        </linearGradient>
+        <linearGradient id="ivoryBevel" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#fff8e6" stop-opacity=".9"/>
+          <stop offset=".3" stop-color="#fff8e6" stop-opacity=".1"/>
+          <stop offset="1" stop-color="#000" stop-opacity=".35"/>
+        </linearGradient>
+        <!-- steel shield -->
+        <linearGradient id="steel" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#aeb3bb"/>
+          <stop offset=".35" stop-color="#5a5e66"/>
+          <stop offset=".7" stop-color="#3a3d42"/>
+          <stop offset="1" stop-color="#1c1e22"/>
+        </linearGradient>
+        <linearGradient id="steelTop" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#e6e9ee"/>
+          <stop offset="1" stop-color="#6a6e76"/>
+        </linearGradient>
+        <!-- interior cavity -->
+        <radialGradient id="cavity" cx=".5" cy=".4" r=".8">
+          <stop offset="0" stop-color="#1a1a1e"/>
+          <stop offset=".7" stop-color="#070708"/>
+          <stop offset="1" stop-color="#000"/>
+        </radialGradient>
+        <!-- gold pin -->
+        <linearGradient id="gold" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#f8dfa0"/>
+          <stop offset=".45" stop-color="#d9b26a"/>
+          <stop offset="1" stop-color="#6e501c"/>
+        </linearGradient>
+        <!-- LED glow -->
+        <radialGradient id="ledGrad" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#d4ff8a"/>
+          <stop offset=".5" stop-color="#b8ff5c"/>
+          <stop offset="1" stop-color="#3a6a14"/>
+        </radialGradient>
+        <filter id="ledGlow" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="threadGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="1.4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="packetGlow" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="2.4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="screenGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+
+        <!-- cable jacket: matte black -->
+        <linearGradient id="jacket" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#2a2a30"/>
+          <stop offset=".5" stop-color="#131316"/>
+          <stop offset="1" stop-color="#07070a"/>
+        </linearGradient>
+        <linearGradient id="plugIvory" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#faf4e4"/>
+          <stop offset=".5" stop-color="#ddd4bd"/>
+          <stop offset="1" stop-color="#8d8572"/>
+        </linearGradient>
+
+        <!-- laptop body -->
+        <linearGradient id="alum" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#bdc0c6"/>
+          <stop offset=".5" stop-color="#7e828a"/>
+          <stop offset="1" stop-color="#3a3d44"/>
+        </linearGradient>
+        <linearGradient id="alumDeck" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#9ea1a8"/>
+          <stop offset="1" stop-color="#4a4d54"/>
+        </linearGradient>
+        <linearGradient id="alumBase" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#6a6d74"/>
+          <stop offset=".5" stop-color="#3a3d44"/>
+          <stop offset="1" stop-color="#1a1c20"/>
+        </linearGradient>
+        <linearGradient id="screenBg" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#14141a"/>
+          <stop offset="1" stop-color="#0a0a0d"/>
+        </linearGradient>
+        <linearGradient id="screenReflect" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".08"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+
+        <!-- floor shadow -->
+        <radialGradient id="floorShade" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#000" stop-opacity=".75"/>
+          <stop offset="1" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- clip so threads burst from inside the screen but stay visible -->
+        <clipPath id="screenClip">
+          <rect x="-230" y="-125" width="460" height="250" rx="5"/>
+        </clipPath>
+      </defs>
+
+      <!-- ═════ WALL + FLOOR backdrop ═════ -->
+      <g id="wallLayer">
+        <!-- full backdrop wall -->
+        <rect id="wallRect" x="0" y="0" width="1400" height="800" fill="url(#wall)"/>
+        <rect x="0" y="0" width="1400" height="800" fill="url(#wallGrain)" opacity=".4"/>
+        <!-- horizontal wainscot line -->
+        <line x1="0" y1="180" x2="1400" y2="180" stroke="#1f1c22" stroke-width="1" opacity=".5"/>
+        <!-- vertical wall seams (panelling) -->
+        <g stroke="#1a1820" stroke-width="1" opacity=".35">
+          <line x1="340" y1="0" x2="340" y2="620"/>
+          <line x1="1060" y1="0" x2="1060" y2="620"/>
+        </g>
+        <!-- floor -->
+        <rect x="0" y="620" width="1400" height="180" fill="#060608"/>
+        <rect x="0" y="620" width="1400" height="180" fill="url(#wallGrain)" opacity=".25"/>
+        <!-- baseboard -->
+        <rect x="0" y="615" width="1400" height="8" fill="#1a181c"/>
+        <rect x="0" y="615" width="1400" height="1.5" fill="#2a262c" opacity=".7"/>
+        <!-- horizon line -->
+        <line x1="0" y1="623" x2="1400" y2="623" stroke="#000" stroke-width="1" opacity=".9"/>
+        <!-- wall-light wash on outlet side -->
+        <radialGradient id="wallWash" cx=".15" cy=".35" r=".4">
+          <stop offset="0" stop-color="#3a2a18" stop-opacity=".2"/>
+          <stop offset="1" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+        <rect x="0" y="0" width="1400" height="620" fill="url(#wallWash)" id="wallWashRect"/>
+      </g>
+
+      <!-- ═════ FLOOR SHADOWS ═════ -->
+      <ellipse id="laptopShadow" cx="870" cy="660" rx="280" ry="16" fill="url(#floorShade)" opacity=".85"/>
+
+      <!-- ═════ WALL OUTLET + RJ45 PORT (wall side) ═════ -->
+      <!-- outletAnchor translates the whole outlet; flipped in RTL via JS -->
+      <g id="outlet" transform="translate(1150 330)">
+        <!-- faceplate -->
+        <rect x="-95" y="-130" width="190" height="260" rx="6" fill="url(#ivory)"/>
+        <rect x="-95" y="-130" width="190" height="260" rx="6" fill="url(#ivoryBevel)" opacity=".9"/>
+        <!-- screws -->
+        <g fill="#3a3a3a">
+          <circle cx="0" cy="-112" r="3.6"/>
+          <circle cx="0" cy="112" r="3.6"/>
+        </g>
+        <g stroke="#fff8e6" stroke-width=".5" fill="none" opacity=".5">
+          <line x1="-3" y1="-115" x2="3" y2="-109"/>
+          <line x1="-3" y1="109" x2="3" y2="115"/>
+        </g>
+        <!-- cutout inset -->
+        <rect x="-70" y="-62" width="140" height="118" rx="3" fill="#0a0a0c" opacity=".35"/>
+
+        <!-- printed label -->
+        <text x="0" y="-88" font-family="JetBrains Mono, monospace" font-size="8" fill="#6a5d3a" opacity=".65" text-anchor="middle" letter-spacing="1.2">LAN · 10/100/1000</text>
+        <text x="0" y="90" font-family="JetBrains Mono, monospace" font-size="7" fill="#6a5d3a" opacity=".5" text-anchor="middle" letter-spacing="1.2">RJ-45 · MF-WALL-01</text>
+
+        <!-- LEDs -->
+        <g id="wallLed" transform="translate(-52 -50)" opacity="0">
+          <circle r="10" fill="url(#ledGrad)" filter="url(#ledGlow)"/>
+          <circle r="4" fill="#f2ffc0"/>
+          <circle r="1.6" fill="#fff" opacity=".9"/>
+        </g>
+        <g transform="translate(-32 -50)"><circle r="4" fill="#2a2014" stroke="#8a7040" stroke-width=".5"/></g>
+        <text x="-58" y="-30" font-family="JetBrains Mono, monospace" font-size="6" fill="#6a5d3a" opacity=".7" letter-spacing=".4">LINK</text>
+        <text x="-38" y="-30" font-family="JetBrains Mono, monospace" font-size="6" fill="#6a5d3a" opacity=".7" letter-spacing=".4">ACT</text>
+
+        <!-- steel shield -->
+        <rect x="-55" y="-20" width="110" height="78" rx="3" fill="url(#steel)"/>
+        <rect x="-55" y="-20" width="110" height="9" rx="2" fill="url(#steelTop)" opacity=".65"/>
+        <g stroke="#0a0a0c" stroke-width=".5" opacity=".55">
+          <line x1="-55" y1="-5" x2="55" y2="-5"/>
+          <line x1="-55" y1="42" x2="55" y2="42"/>
+          <line x1="-40" y1="-20" x2="-40" y2="58"/>
+          <line x1="40" y1="-20" x2="40" y2="58"/>
+        </g>
+        <g fill="#1a1c20">
+          <circle cx="-46" cy="-11" r="1.6"/><circle cx="46" cy="-11" r="1.6"/>
+          <circle cx="-46" cy="49" r="1.6"/><circle cx="46" cy="49" r="1.6"/>
+        </g>
+        <!-- latch cutout top -->
+        <path d="M -10 -20 L -10 -27 L 10 -27 L 10 -20 Z" fill="#0a0a0c"/>
+        <!-- inner cavity -->
+        <path d="M -47 -8 L -47 48 L -18 48 L -18 40 L 18 40 L 18 48 L 47 48 L 47 -8 Z" fill="url(#cavity)"/>
+        <path d="M -47 -8 L 47 -8 L 43 -3 L -43 -3 Z" fill="#1e2024" opacity=".85"/>
+        <!-- pins -->
+        <g fill="url(#gold)" stroke="#5a3f18" stroke-width=".3">
+          <rect x="-34" y="-4" width="2.2" height="26" rx=".5"/>
+          <rect x="-26" y="-4" width="2.2" height="26" rx=".5"/>
+          <rect x="-18" y="-4" width="2.2" height="26" rx=".5"/>
+          <rect x="-10" y="-4" width="2.2" height="26" rx=".5"/>
+          <rect x="-2" y="-4" width="2.2" height="26" rx=".5"/>
+          <rect x="6" y="-4" width="2.2" height="26" rx=".5"/>
+          <rect x="14" y="-4" width="2.2" height="26" rx=".5"/>
+          <rect x="22" y="-4" width="2.2" height="26" rx=".5"/>
+        </g>
+        <g fill="#fff4c7" opacity=".7">
+          <rect x="-33.5" y="-3" width=".5" height="24"/>
+          <rect x="-25.5" y="-3" width=".5" height="24"/>
+          <rect x="-17.5" y="-3" width=".5" height="24"/>
+          <rect x="-9.5" y="-3" width=".5" height="24"/>
+          <rect x="-1.5" y="-3" width=".5" height="24"/>
+          <rect x="6.5" y="-3" width=".5" height="24"/>
+          <rect x="14.5" y="-3" width=".5" height="24"/>
+          <rect x="22.5" y="-3" width=".5" height="24"/>
+        </g>
+        <rect x="-47" y="-8" width="94" height="56" fill="black" opacity=".22"/>
+        <path d="M -55 -18 L 55 -18" stroke="#fff" stroke-width=".8" stroke-opacity=".3"/>
+      </g>
+
+      <!-- ═════ LAPTOP — clean front-facing silver laptop with tilted lid ═════ -->
+      <g id="laptop" transform="translate(870 540)">
+        <!-- contact shadow under base -->
+        <ellipse cx="0" cy="130" rx="320" ry="8" fill="#000" opacity=".7"/>
+
+        <!-- ─── BASE (wedge, front face) ─── -->
+        <!-- side walls wrap: front face darker than deck -->
+        <path d="M -305 120 L 305 120 L 320 138 L -320 138 Z" fill="#0b0c0f"/>
+        <!-- bottom rim highlight -->
+        <path d="M -320 138 L 320 138 L 318 140 L -318 140 Z" fill="#2a2d33"/>
+
+        <!-- ─── DECK (top surface of base, gently tapered) ─── -->
+        <path d="M -290 118 L 290 118 L 300 124 L -300 124 Z" fill="url(#alumDeck)"/>
+        <path d="M -290 118 L 290 118 L 289 119 L -289 119 Z" fill="#d8dbe0" opacity=".5"/>
+
+        <!-- keyboard hint: subtle dark strip -->
+        <rect x="-220" y="100" width="440" height="16" rx="2" fill="#1a1c20" opacity=".45"/>
+        <!-- trackpad -->
+        <rect x="-70" y="99" width="140" height="18" rx="2" fill="#15171b"/>
+        <rect x="-70" y="99" width="140" height="1.2" fill="#2a2d33" opacity=".8"/>
+
+        <!-- ─── HINGE ─── -->
+        <rect x="-272" y="90" width="544" height="8" rx="1.5" fill="#2a2d33"/>
+        <rect x="-272" y="90" width="544" height="1.2" fill="#0a0a0c"/>
+        <rect x="-272" y="97" width="544" height="1" fill="#3f434a" opacity=".5"/>
+
+        <!-- ─── LID (tilted back very slightly via slight taper) ─── -->
+        <g>
+          <!-- outer lid back shadow -->
+          <rect x="-278" y="-168" width="556" height="262" rx="10" fill="#17191e"/>
+          <!-- lid aluminum face -->
+          <rect x="-272" y="-162" width="544" height="254" rx="9" fill="url(#alum)"/>
+          <!-- lid top highlight -->
+          <rect x="-272" y="-162" width="544" height="5" rx="2" fill="#e5e8ee" opacity=".4"/>
+          <!-- inner bezel (deep black) -->
+          <rect x="-260" y="-150" width="520" height="230" rx="4" fill="#05050a"/>
+          <!-- screen content region -->
+          <g transform="translate(0 -35)">
+            <rect x="-232" y="-108" width="464" height="198" rx="4" fill="url(#screenBg)"/>
+            <g clip-path="url(#screenClip)">
+              <!-- subtle scanlines -->
+              <g opacity=".05">
+                <line x1="-232" y1="-90" x2="232" y2="-90" stroke="#fff"/>
+                <line x1="-232" y1="-50" x2="232" y2="-50" stroke="#fff"/>
+                <line x1="-232" y1="-10" x2="232" y2="-10" stroke="#fff"/>
+                <line x1="-232" y1="30" x2="232" y2="30" stroke="#fff"/>
+                <line x1="-232" y1="70" x2="232" y2="70" stroke="#fff"/>
+              </g>
+
+              <!-- menu bar -->
+              <rect x="-232" y="-108" width="464" height="16" fill="#0f0f13"/>
+              <circle cx="-220" cy="-100" r="2.6" fill="#b8ff5c" opacity=".9"/>
+              <text x="-212" y="-97" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#e8e4da" font-weight="500">Manfath</text>
+              <text x="-170" y="-97" font-family="JetBrains Mono, monospace" font-size="7" fill="#5a564e">8 ports</text>
+              <text x="222" y="-97" font-family="JetBrains Mono, monospace" font-size="7" fill="#5a564e" text-anchor="end">10:42</text>
+
+              <!-- popover header -->
+              <rect x="-212" y="-82" width="424" height="16" rx="2" fill="#17171c"/>
+              <circle cx="-202" cy="-74" r="2.2" fill="#b8ff5c"><animate attributeName="opacity" values="1;.3;1" dur="2.2s" repeatCount="indefinite"/></circle>
+              <text x="-194" y="-71" font-family="JetBrains Mono, monospace" font-size="7" fill="#9a958a">listening on localhost</text>
+              <text x="204" y="-71" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#5a564e" text-anchor="end">scan 0.8s</text>
+
+              <!-- port rows — mini -->
+              <g id="screenRows" font-family="JetBrains Mono, monospace" font-size="8.5">
+                <g transform="translate(0 -54)">
+                  <text x="-202" y="11" fill="#b8ff5c" font-weight="600">3000</text>
+                  <text x="-172" y="11" fill="#e8e4da">next dev</text>
+                  <text x="-118" y="11" fill="#5a564e">node · 28471</text>
+                  <text x="202" y="11" fill="#5a564e" text-anchor="end" font-size="6.5">open · tunnel · kill</text>
+                </g>
+                <g transform="translate(0 -37)">
+                  <text x="-202" y="11" fill="#b8ff5c" font-weight="600">5432</text>
+                  <text x="-172" y="11" fill="#e8e4da">postgres</text>
+                  <text x="-118" y="11" fill="#5a564e">main · 1024</text>
+                  <g transform="translate(150 3)">
+                    <rect x="0" y="2" width="28" height="9" rx="1.5" fill="rgba(92,228,255,.15)"/>
+                    <text x="14" y="9" fill="#5ce4ff" text-anchor="middle" font-size="6">● live</text>
+                  </g>
+                </g>
+                <g transform="translate(0 -20)">
+                  <text x="-202" y="11" fill="#b8ff5c" font-weight="600">8080</text>
+                  <text x="-172" y="11" fill="#e8e4da">nginx</text>
+                  <text x="-118" y="11" fill="#5a564e">worker · 9934</text>
+                </g>
+                <g transform="translate(0 -3)">
+                  <text x="-202" y="11" fill="#b8ff5c" font-weight="600">6379</text>
+                  <text x="-172" y="11" fill="#e8e4da">redis</text>
+                  <text x="-118" y="11" fill="#5a564e">* · 4812</text>
+                </g>
+                <g transform="translate(0 14)">
+                  <text x="-202" y="11" fill="#b8ff5c" font-weight="600">4000</text>
+                  <text x="-172" y="11" fill="#e8e4da">phoenix</text>
+                  <text x="-118" y="11" fill="#5a564e">beam · 30210</text>
+                </g>
+                <g transform="translate(0 31)">
+                  <text x="-202" y="11" fill="#b8ff5c" font-weight="600">5173</text>
+                  <text x="-172" y="11" fill="#e8e4da">vite</text>
+                  <text x="-118" y="11" fill="#5a564e">node · 31108</text>
+                </g>
+                <g transform="translate(0 48)">
+                  <text x="-202" y="11" fill="#b8ff5c" font-weight="600">27017</text>
+                  <text x="-172" y="11" fill="#e8e4da">mongod</text>
+                  <text x="-118" y="11" fill="#5a564e">data · 2210</text>
+                </g>
+              </g>
+
+              <g stroke="#1a1a20" stroke-width=".5">
+                <line x1="-212" y1="-54" x2="212" y2="-54"/>
+                <line x1="-212" y1="-37" x2="212" y2="-37"/>
+                <line x1="-212" y1="-20" x2="212" y2="-20"/>
+                <line x1="-212" y1="-3" x2="212" y2="-3"/>
+                <line x1="-212" y1="14" x2="212" y2="14"/>
+                <line x1="-212" y1="31" x2="212" y2="31"/>
+                <line x1="-212" y1="48" x2="212" y2="48"/>
+              </g>
+
+              <!-- footer -->
+              <rect x="-232" y="73" width="464" height="17" fill="#0f0f13"/>
+              <circle cx="-220" cy="81" r="1.6" fill="#8fc840"><animate attributeName="opacity" values="1;.3;1" dur="2.2s" repeatCount="indefinite"/></circle>
+              <text x="-212" y="84" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#5a564e">scanning every 3s</text>
+              <text x="222" y="84" font-family="JetBrains Mono, monospace" font-size="6.5" fill="#5a564e" text-anchor="end">⌘K</text>
+            </g>
+            <!-- screen vignette -->
+            <rect x="-232" y="-108" width="464" height="198" rx="4" fill="none" stroke="rgba(184,255,92,.06)" stroke-width="1"/>
+            <!-- soft light-from-above reflection -->
+            <rect x="-232" y="-108" width="464" height="40" rx="4" fill="url(#screenReflect)" opacity=".4"/>
+          </g>
+
+          <!-- camera notch -->
+          <rect x="-14" y="-162" width="28" height="6" rx="2.5" fill="#05050a"/>
+          <circle cx="0" cy="-159" r="1.4" fill="#0a0a0c"/>
+          <circle cx="0" cy="-159" r=".5" fill="#1e2024"/>
+        </g>
+
+        <!-- port (LTR: left side, world 570,630; RTL mirror on right side) — see blocks below -->
+        <g id="laptopPort" transform="translate(300 90)" style="display:none">
+          <rect x="-22" y="-14" width="26" height="28" rx="2" fill="#2a2d33"/>
+          <rect x="-18" y="-10" width="18" height="20" rx="1.5" fill="#06060a"/>
+          <g fill="url(#gold)" stroke="#5a3f18" stroke-width=".3">
+            <rect x="-16" y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-13" y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-10" y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-7"  y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-4"  y="-7" width="1.2" height="14" rx=".3"/>
+          </g>
+          <circle id="laptopLed" cx="10" cy="-7" r="2.2" fill="url(#ledGrad)" filter="url(#ledGlow)" opacity="0"/>
+        </g>
+        <g id="laptopPortLeft" transform="translate(-300 90)">
+          <!-- port recess on left side of base -->
+          <rect x="-22" y="-14" width="26" height="28" rx="2" fill="#2a2d33"/>
+          <rect x="-22" y="-14" width="26" height="4" rx="1" fill="#3f434a"/>
+          <rect x="-18" y="-10" width="18" height="20" rx="1.5" fill="#06060a"/>
+          <g fill="url(#gold)" stroke="#5a3f18" stroke-width=".3">
+            <rect x="-16" y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-13" y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-10" y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-7"  y="-7" width="1.2" height="14" rx=".3"/>
+            <rect x="-4"  y="-7" width="1.2" height="14" rx=".3"/>
+          </g>
+          <text x="-20" y="-18" font-family="JetBrains Mono, monospace" font-size="5" fill="#5a564e" letter-spacing=".3">ETH</text>
+          <circle id="laptopLedLeft" cx="10" cy="-7" r="2.2" fill="url(#ledGrad)" filter="url(#ledGlow)" opacity="0"/>
+          <circle cx="10" cy="1" r="1.2" fill="#2a2014" stroke="#6a5030" stroke-width=".3"/>
+        </g>
+      </g>
+<!-- ═════ THREAD LAYER — threads fan OUT from laptop screen ═════ -->
+      <g id="threads"></g>
+      <g id="nodeLabels"></g>
+      <g id="packets"></g>
+
+      <!-- ═════ CABLE — single curved path from wall outlet to laptop port ═════ -->
+      <path id="cablePath" d="M 180 315 C 220 500, 360 680, 570 630" stroke="url(#jacket)" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path id="cableHighlight" d="M 180 312 C 220 497, 360 677, 570 627" stroke="#4a4a52" stroke-width="2" fill="none" stroke-linecap="round" opacity=".45"/>
+
+      <!-- plug sprite — positioned and rotated along the cable path by JS. Body oriented so the plug TIP points to +x (right). -->
+      <g id="plug" transform="translate(180 315) rotate(0)" opacity="0">
+        <!-- strain relief boot (behind the plug, on the cable side) -->
+        <path d="M -32 -10 Q -36 0 -32 10 L -18 10 L -18 -10 Z" fill="url(#jacket)"/>
+        <rect x="-32" y="-10" width="14" height="3" fill="#fff" opacity=".08"/>
+        <!-- ivory plug body -->
+        <rect x="-18" y="-12" width="26" height="24" rx="2" fill="url(#plugIvory)"/>
+        <rect x="-18" y="-12" width="26" height="6" rx="1" fill="#fff8e6" opacity=".3"/>
+        <!-- latch clip sticking up -->
+        <path d="M -8 -12 L -8 -16 L 4 -16 L 4 -12 Z" fill="url(#plugIvory)"/>
+        <path d="M -8 -16 L -6 -18 L 2 -18 L 4 -16 Z" fill="#b8ab8f"/>
+        <!-- pin window -->
+        <rect x="-14" y="-9" width="20" height="18" rx="1" fill="#12121a"/>
+        <g fill="url(#gold)" stroke="#5a3f18" stroke-width=".2">
+          <rect x="-12" y="-7" width="1.2" height="14" rx=".3"/>
+          <rect x="-9"  y="-7" width="1.2" height="14" rx=".3"/>
+          <rect x="-6"  y="-7" width="1.2" height="14" rx=".3"/>
+          <rect x="-3"  y="-7" width="1.2" height="14" rx=".3"/>
+          <rect x="0"   y="-7" width="1.2" height="14" rx=".3"/>
+          <rect x="3"   y="-7" width="1.2" height="14" rx=".3"/>
+        </g>
+        <!-- tip nose (chunky, facing right) -->
+        <rect x="8" y="-10" width="4" height="20" rx="1" fill="url(#plugIvory)"/>
+        <rect x="8" y="-10" width="4" height="3" fill="#fff8e6" opacity=".4"/>
+      </g>
+
+    </svg>
+  </div>
+</section>
+
+<!-- ═════════════════ DASHBOARD ═════════════════ -->
+<section class="block" id="dashboard">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow" data-i18n="dash.eyebrow">The menu bar, live</span>
+      <h2 class="sect" data-i18n="dash.title">Every port. Always visible.</h2>
+      <p class="sect-sub" data-i18n="dash.sub">One keyboard shortcut opens the scanner. Sorted by activity, filterable by name, and always current — Manfath re-scans every three seconds.</p>
+    </div>
+    <div class="dashboard-wrap reveal">
+      <div>
+        <div class="menubar-anchor"></div>
+        <div class="popover">
+
+          <!-- Header: live LED + title + scan meta -->
+          <div class="pop-head">
+            <div class="pop-head-title"><span class="live"></span><span data-i18n="pop.title">Listening on localhost</span></div>
+            <div class="pop-head-meta"><span data-i18n="pop.meta">8 ports · last scan 0.8s ago</span></div>
+          </div>
+
+          <!-- Search bar -->
+          <div class="pop-search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <span data-i18n="pop.search">Search ports, processes, PIDs…</span>
+            <span class="kbd">⌘K</span>
+          </div>
+
+          <!-- Body: pinned groups first, then auto-classified categories -->
+          <div class="pop-rows">
+
+            <!-- Pinned group: Next.js -->
+            <div class="pop-section">
+              <div class="pop-section-head">
+                <svg class="chev open" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4l5 4-5 4z" fill="currentColor"/></svg>
+                <svg class="pin" viewBox="0 0 16 16" aria-hidden="true"><path d="M11 2v4l2 2v2H9v3l-1 2-1-2V10H3V8l2-2V2z" fill="currentColor"/></svg>
+                <span class="sect-name">Next.js</span>
+                <span class="sect-sep">·</span>
+                <span class="sect-count">1</span>
+              </div>
+              <div class="row">
+                <span class="port-num">3000</span>
+                <span class="proc">
+                  <svg class="brand brand-nextjs" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.665 21.978C16.758 23.255 14.465 24 12 24 5.377 24 0 18.623 0 12S5.377 0 12 0s12 5.377 12 12c0 3.583-1.574 6.801-4.067 9.001L9.219 7.2H7.2v9.596h1.615V9.251l9.85 12.727Zm-3.332-8.533 1.6 2.061V7.2h-1.6v6.245Z" fill="currentColor"/></svg>
+                  next dev <span class="dim">· my-app · 28471</span>
+                </span>
+                <div class="actions">
+                  <button class="pill-icon amber" aria-label="open"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4h-1V4.7L6.7 10 6 9.3 11.3 4H9z" fill="currentColor"/><path d="M3 4h3V3H2v11h11v-4h-1v3H3z" fill="currentColor"/></svg></button>
+                  <button class="pill-icon cyan" aria-label="tunnel"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.7 7.2A3 3 0 0 0 5.7 6.5 2.5 2.5 0 0 0 4 11h7.5a2 2 0 0 0 .2-3.8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                  <button class="pill-icon danger" aria-label="kill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 5h6l-.5 8h-5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M3.5 4h9M6.5 4V3h3v1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pinned group: PostgreSQL — running tunnel inline -->
+            <div class="pop-section">
+              <div class="pop-section-head">
+                <svg class="chev open" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4l5 4-5 4z" fill="currentColor"/></svg>
+                <svg class="pin" viewBox="0 0 16 16" aria-hidden="true"><path d="M11 2v4l2 2v2H9v3l-1 2-1-2V10H3V8l2-2V2z" fill="currentColor"/></svg>
+                <span class="sect-name">PostgreSQL</span>
+                <span class="sect-sep">·</span>
+                <span class="sect-count">1</span>
+              </div>
+              <div class="row">
+                <span class="port-num">5432</span>
+                <span class="proc">
+                  <svg class="brand brand-postgres" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.56 14.72a.53.53 0 0 0-.06-.12c-.14-.27-.48-.34-1-.23-1.66.34-2.3.13-2.53-.02 1.34-2.05 2.45-4.52 3.04-6.83.27-1.05.8-3.52.12-4.73a1.56 1.56 0 0 0-.15-.24A6.97 6.97 0 0 0 17.51 0c-1.5-.01-2.78.35-3.12.48a9.45 9.45 0 0 0-.52-.08C13.43.36 12.99.32 12.55.32c-1.18-.02-2.2.27-3.05.84-.86-.32-4.79-1.65-7.22.08C.94 2.15.31 3.87.43 6.3c.04.82.51 3.34 1.24 5.75.46 1.5.94 2.7 1.43 3.58.55.99 1.13 1.59 1.71 1.79.45.15 1.13.14 1.86-.73.8-.96 1.59-1.83 1.94-2.21.43.24.91.36 1.39.38a.06.06 0 0 0 0 0c-.07.1-.16.21-.25.31-.34.43-.41.52-1.5.74-.31.06-1.13.23-1.15.81 0 .12.04.23.1.33.22.42.92.6 1.01.63 1.34.33 2.5.09 3.37-.68-.02 2.23.07 4.42.34 5.09.23.55.77 1.9 2.47 1.9.25 0 .53-.03.83-.09 1.78-.38 2.55-1.17 2.85-2.9.15-.87.4-2.88.54-4.1.02-.07.03-.13.06-.13 0-.01.07-.05.43.03a.37.37 0 0 0 .04.01l.25.02.01 0c.85.04 1.91-.14 2.53-.43.65-.3 1.81-1.03 1.6-1.67z" fill="currentColor"/></svg>
+                  postgres <span class="dim">· homebrew · 2778</span>
+                  <span class="tunnel-badge"><span class="dot"></span>live</span>
+                </span>
+                <div class="actions">
+                  <button class="pill-icon amber" aria-label="open"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4h-1V4.7L6.7 10 6 9.3 11.3 4H9z" fill="currentColor"/><path d="M3 4h3V3H2v11h11v-4h-1v3H3z" fill="currentColor"/></svg></button>
+                  <button class="pill-icon cyan active" aria-label="stop"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="6" y="6" width="4" height="4" fill="currentColor"/></svg></button>
+                  <button class="pill-icon danger" aria-label="kill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 5h6l-.5 8h-5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M3.5 4h9M6.5 4V3h3v1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-classified: dev servers -->
+            <div class="pop-section">
+              <div class="pop-section-head">
+                <svg class="chev open" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4l5 4-5 4z" fill="currentColor"/></svg>
+                <span class="sect-name">Dev servers</span>
+                <span class="sect-sep">·</span>
+                <span class="sect-count">1</span>
+              </div>
+              <div class="row hover">
+                <span class="port-num">5173</span>
+                <span class="proc">
+                  <svg class="brand brand-vite" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.06 23.24a.57.57 0 0 1-1.02-.36v-5.2c0-.63-.51-1.14-1.14-1.14H5.15a.57.57 0 0 1-.46-.9l3.78-5.3c.54-.75 0-1.8-.93-1.8H.57a.57.57 0 0 1-.54-.75.6.6 0 0 1 .08-.16L5.01.78A.57.57 0 0 1 5.48.54h14.59a.57.57 0 0 1 .46.9l-3.78 5.3c-.54.75 0 1.8.93 1.8h5.74a.56.56 0 0 1 .51.32.56.56 0 0 1-.06.6z" fill="currentColor"/></svg>
+                  vite <span class="dim">· dashboard · 31108</span>
+                </span>
+                <!-- Hovered row: pills expand to show labels -->
+                <div class="actions actions-expanded">
+                  <button class="pill amber"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4h-1V4.7L6.7 10 6 9.3 11.3 4H9z" fill="currentColor"/><path d="M3 4h3V3H2v11h11v-4h-1v3H3z" fill="currentColor"/></svg>open</button>
+                  <button class="pill cyan"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.7 7.2A3 3 0 0 0 5.7 6.5 2.5 2.5 0 0 0 4 11h7.5a2 2 0 0 0 .2-3.8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>tunnel</button>
+                  <button class="pill danger"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 5h6l-.5 8h-5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M3.5 4h9M6.5 4V3h3v1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>kill</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-classified: databases -->
+            <div class="pop-section">
+              <div class="pop-section-head">
+                <svg class="chev open" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 4l5 4-5 4z" fill="currentColor"/></svg>
+                <span class="sect-name">Databases</span>
+                <span class="sect-sep">·</span>
+                <span class="sect-count">2</span>
+              </div>
+              <div class="row">
+                <span class="port-num">6379</span>
+                <span class="proc">
+                  <svg class="brand brand-redis" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.71 13.15c-1.66 2.09-3.45 4.48-7.04 4.48-3.2 0-4.4-2.83-4.48-5.12.7 1.48 2.07 2.69 4.21 2.63 4.12-.13 6.94-3.85 6.94-7.24 0-4.05-3.02-6.97-8.27-6.97-3.75 0-8.4 1.43-11.45 3.69.27.31 1.57 3.34 2.04 3.01 2.65-1.9 4.75-3.13 6.78-3.74-3.02 3.36-10.25 11.16-11.13 12.54.1 1.26 1.66 4.65 2.42 4.65.23 0 .43-.13.66-.37a100.5 100.5 0 0 0 5.54-6.76c.22 3.1 1.75 6.9 6.01 6.9 3.82 0 7.6-2.76 9.33-8.97.2-.76-.73-1.36-1.26-.73zm-4.35-5.02c0 1.96-1.93 2.92-3.69 2.92-.94 0-1.66-.25-2.23-.57 1.05-1.59 2.09-3.22 3.21-4.97 1.97.33 2.71 1.43 2.71 2.62z" fill="currentColor"/></svg>
+                  redis-server <span class="dim">· 4812</span>
+                </span>
+                <div class="actions">
+                  <button class="pill-icon amber" aria-label="open"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4h-1V4.7L6.7 10 6 9.3 11.3 4H9z" fill="currentColor"/><path d="M3 4h3V3H2v11h11v-4h-1v3H3z" fill="currentColor"/></svg></button>
+                  <button class="pill-icon cyan" aria-label="tunnel"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.7 7.2A3 3 0 0 0 5.7 6.5 2.5 2.5 0 0 0 4 11h7.5a2 2 0 0 0 .2-3.8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                  <button class="pill-icon danger" aria-label="kill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 5h6l-.5 8h-5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M3.5 4h9M6.5 4V3h3v1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+                </div>
+              </div>
+              <div class="row">
+                <span class="port-num">27017</span>
+                <span class="proc">
+                  <svg class="brand brand-mongo" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.19 9.56C15.93 3.97 12.94 2.14 12.62 1.44c-.28-.4-.53-.95-.74-1.44-.03.5-.05.69-.52 1.18-.72.57-4.44 3.69-4.74 10.02-.28 5.91 4.27 9.44 4.89 9.88l.07.06A73.5 73.5 0 0 1 11.91 24h.48c.11-1.03.28-2.06.51-3.07.42-.3.6-.46.85-.69a11.34 11.34 0 0 0 3.64-8.47c.01-.81-.1-1.66-.2-2.21zm-5.34 8.2s0-8.3.28-8.3c.21 0 .49 10.7.49 10.7-.38-.05-.77-1.76-.77-2.4z" fill="currentColor"/></svg>
+                  mongod <span class="dim">· data · 2210</span>
+                </span>
+                <div class="actions">
+                  <button class="pill-icon amber" aria-label="open"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4h-1V4.7L6.7 10 6 9.3 11.3 4H9z" fill="currentColor"/><path d="M3 4h3V3H2v11h11v-4h-1v3H3z" fill="currentColor"/></svg></button>
+                  <button class="pill-icon cyan" aria-label="tunnel"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11.7 7.2A3 3 0 0 0 5.7 6.5 2.5 2.5 0 0 0 4 11h7.5a2 2 0 0 0 .2-3.8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></button>
+                  <button class="pill-icon danger" aria-label="kill"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 5h6l-.5 8h-5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M3.5 4h9M6.5 4V3h3v1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Footer: scan dot + cadence + pin menu + view toggle + gear -->
+          <div class="pop-foot">
+            <span class="foot-left">
+              <span class="scan-dot"></span><span data-i18n="pop.foot.left">Scanning every 3s</span>
+            </span>
+            <span class="foot-right">
+              <button class="foot-btn" aria-label="Pin a preset">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11 2v4l2 2v2H9v3l-1 2-1-2V10H3V8l2-2V2z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+              </button>
+              <span class="view-toggle">
+                <button class="active" aria-label="Sections"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="2.5" rx=".5" fill="currentColor"/><rect x="2" y="6.8" width="12" height="2.5" rx=".5" fill="currentColor"/><rect x="2" y="10.5" width="12" height="2.5" rx=".5" fill="currentColor"/></svg></button>
+                <button aria-label="List"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3" cy="4" r="1" fill="currentColor"/><rect x="6" y="3" width="8" height="2" rx=".5" fill="currentColor"/><circle cx="3" cy="8" r="1" fill="currentColor"/><rect x="6" y="7" width="8" height="2" rx=".5" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><rect x="6" y="11" width="8" height="2" rx=".5" fill="currentColor"/></svg></button>
+              </span>
+              <button class="foot-btn" aria-label="Settings">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1.5v2M8 12.5v2M14.5 8h-2M3.5 8h-2M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4M12.6 12.6l-1.4-1.4M4.8 4.8 3.4 3.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </button>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ FEATURES ═════════════════ -->
+<section class="block" id="features" style="padding-top:40px">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow" data-i18n="feat.eyebrow">Three things, done well</span>
+      <h2 class="sect" data-i18n="feat.title">Scan. Kill. Tunnel.</h2>
+    </div>
+    <div class="features reveal">
+      <div class="feat">
+        <!-- scan icon: port mouth with radiating scan ring -->
+        <svg class="feat-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="10" y="20" width="44" height="24" rx="3" fill="#e8e2d4"/>
+          <rect x="16" y="26" width="32" height="12" rx="1" fill="#0a0a0c"/>
+          <rect x="19" y="28" width="1.5" height="8" fill="#d9b26a"/>
+          <rect x="23" y="28" width="1.5" height="8" fill="#d9b26a"/>
+          <rect x="27" y="28" width="1.5" height="8" fill="#d9b26a"/>
+          <rect x="31" y="28" width="1.5" height="8" fill="#d9b26a"/>
+          <rect x="35" y="28" width="1.5" height="8" fill="#d9b26a"/>
+          <rect x="39" y="28" width="1.5" height="8" fill="#d9b26a"/>
+          <rect x="43" y="28" width="1.5" height="8" fill="#d9b26a"/>
+          <circle cx="32" cy="32" r="16" stroke="#b8ff5c" stroke-width="1.2" stroke-dasharray="3 3" opacity=".7"/>
+          <circle cx="32" cy="32" r="22" stroke="#b8ff5c" stroke-width="1" stroke-dasharray="2 5" opacity=".35"/>
+        </svg>
+        <h3 data-i18n="feat.1.title">Scan</h3>
+        <p data-i18n="feat.1.body">Every listening port, every 3 seconds, zero config. TCP, UDP, IPv4, IPv6 — with the process name and PID behind each one.</p>
+      </div>
+      <div class="feat">
+        <!-- kill icon: port + X -->
+        <svg class="feat-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="10" y="20" width="44" height="24" rx="3" fill="#e8e2d4"/>
+          <rect x="16" y="26" width="32" height="12" rx="1" fill="#0a0a0c"/>
+          <g stroke="#ff7a7a" stroke-width="2.5" stroke-linecap="round">
+            <line x1="22" y1="22" x2="42" y2="42"/>
+            <line x1="42" y1="22" x2="22" y2="42"/>
+          </g>
+          <circle cx="32" cy="32" r="14" stroke="#ff7a7a" stroke-width=".8" opacity=".5"/>
+        </svg>
+        <h3 data-i18n="feat.2.title">Kill</h3>
+        <p data-i18n="feat.2.body">Stuck process on :3000? One click, it's gone. SIGTERM first, SIGKILL if it misbehaves — with zero terminal yoga.</p>
+      </div>
+      <div class="feat">
+        <!-- tunnel icon -->
+        <svg class="feat-icon" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <rect x="8" y="22" width="24" height="20" rx="3" fill="#e8e2d4"/>
+          <rect x="12" y="26" width="16" height="12" rx="1" fill="#0a0a0c"/>
+          <rect x="14" y="28" width="1" height="8" fill="#d9b26a"/>
+          <rect x="17" y="28" width="1" height="8" fill="#d9b26a"/>
+          <rect x="20" y="28" width="1" height="8" fill="#d9b26a"/>
+          <rect x="23" y="28" width="1" height="8" fill="#d9b26a"/>
+          <rect x="26" y="28" width="1" height="8" fill="#d9b26a"/>
+          <path d="M32 32 C 42 32, 46 22, 56 22" stroke="#5ce4ff" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="56" cy="22" r="4" fill="#5ce4ff"/>
+          <circle cx="56" cy="22" r="7" stroke="#5ce4ff" stroke-width=".8" opacity=".5" fill="none"/>
+          <circle cx="44" cy="28" r="1.6" fill="#5ce4ff"/>
+        </svg>
+        <h3 data-i18n="feat.3.title">Tunnel</h3>
+        <p data-i18n="feat.3.body">Share localhost with a public URL in one line. Cloudflare, ngrok, or your own — Manfath wires it up and copies the link.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ THREADS DIAGRAM ═════════════════ -->
+<section class="block" id="stack" style="padding-top:40px">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow" data-i18n="stack.eyebrow">Works with your stack</span>
+      <h2 class="sect" data-i18n="stack.title">Wired to whatever you're building.</h2>
+      <p class="sect-sub" data-i18n="stack.sub">Manfath sees processes, not frameworks — which means it sees everything. Here's a weekend's worth of side projects, all in one glance.</p>
+    </div>
+    <div class="stacks reveal">
+      <svg id="stackSvg" viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <radialGradient id="coreGlow" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#b8ff5c" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#b8ff5c" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- will be populated by JS -->
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ TUNNEL DEMO ═════════════════ -->
+<section class="block" id="tunnel" style="padding-top:40px">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow" data-i18n="tun.eyebrow">One line. One link.</span>
+      <h2 class="sect" data-i18n="tun.title">Push any port past your firewall.</h2>
+      <p class="sect-sub" data-i18n="tun.sub">A thread leaves your machine, reaches a public URL, and comes back as a link in your clipboard. No config, no dashboard login.</p>
+    </div>
+    <div class="tunnel-demo reveal">
+      <svg id="tunnelSvg" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="toast" id="tunnelToast">
+        <span class="tick">
+          <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 6l3 3 5-6"/></svg>
+        </span>
+        <span><span data-i18n="tun.toast">Copied</span> <span class="mono" style="color:var(--ink);margin-inline-start:8px">https://warm-lake-3f2.manfath.sh</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ OSS ═════════════════ -->
+<section class="block" id="oss" style="padding-top:40px">
+  <div class="wrap">
+    <div class="oss reveal">
+      <div>
+        <span class="eyebrow" data-i18n="oss.eyebrow">Open source, without asterisks</span>
+        <h2 data-i18n="oss.title">Free forever. MIT. No accounts, no telemetry, no upsell.</h2>
+        <p data-i18n="oss.body">Manfath is built in the open. Star us on GitHub, file an issue, or send a PR. The whole app is a few thousand lines of Swift — a good place to learn how menu bar apps work.</p>
+        <div class="oss-badges">
+          <span class="badge star">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="#b8ff5c"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+            <span class="lbl" data-i18n="oss.stars">stars</span><span class="val mono" id="ghStars">—</span>
+          </span>
+          <span class="badge license">
+            <span class="lbl" data-i18n="oss.license">license</span><span class="val mono">MIT</span>
+          </span>
+          <span class="badge">
+            <span class="lbl" data-i18n="oss.contrib">contributors</span><span class="val mono" id="ghContributors">—</span>
+          </span>
+          <span class="badge">
+            <span class="lbl" data-i18n="oss.version">version</span><span class="val mono" id="ghVersion">1.0.0</span>
+          </span>
+        </div>
+      </div>
+      <div class="oss-card">
+<span class="cmt"># clone it, read it, break it</span><br>
+<span class="k">$</span> git clone <span class="s">github.com/Dnymte/manfath.git</span><br>
+<span class="k">$</span> cd manfath && open Manfath.xcodeproj<br><br>
+<span class="cmt"># or contribute without touching Xcode</span><br>
+<span class="k">$</span> gh issue list <span class="s">--label "good first issue"</span><br><br>
+<span class="cmt"># PRs welcome, especially around:</span><br>
+<span class="cmt"># · alternative tunnel providers</span><br>
+<span class="cmt"># · locale / RTL polish</span><br>
+<span class="cmt"># · Linux &amp; Windows ports</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ PRIVACY ═════════════════ -->
+<section class="block" style="padding:60px 0 0">
+  <div class="wrap">
+    <p class="privacy reveal">
+      <span data-i18n="privacy.1">Everything runs on your machine.</span>
+      <span class="q" data-i18n="privacy.2">Nothing leaves it</span>
+      <span data-i18n="privacy.3">unless</span>
+      <span class="hi" data-i18n="privacy.4">you</span>
+      <span data-i18n="privacy.5">tunnel it.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ═════════════════ DOWNLOAD ═════════════════ -->
+<section class="block download" id="download">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow" data-i18n="dl.eyebrow">Ready in 30 seconds</span>
+      <h2 class="sect" data-i18n="dl.title">Download Manfath</h2>
+      <p class="sect-sub" style="margin:0 auto" data-i18n="dl.sub">Universal binary — Apple Silicon and Intel. macOS 12 Monterey or later.</p>
+      <div class="download-row" style="margin-top:32px">
+        <a class="btn btn-primary" href="#">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 13.3c0-2.9 2.3-4.2 2.4-4.3-1.3-1.9-3.4-2.2-4.1-2.2-1.7-.2-3.4 1-4.3 1-.9 0-2.3-1-3.8-1-1.9 0-3.7 1.1-4.7 2.9-2 3.5-.5 8.7 1.4 11.5 1 1.4 2.1 3 3.6 2.9 1.5-.1 2-.9 3.8-.9s2.2.9 3.8.9c1.6 0 2.6-1.4 3.5-2.8 1.1-1.6 1.6-3.2 1.6-3.2-.1 0-3.2-1.2-3.2-4.8z"/></svg>
+          <span data-i18n="dl.primary">Download Manfath 1.0.2</span>
+        </a>
+        <a class="btn btn-ghost" href="#"><span data-i18n="dl.releases">All releases</span></a>
+      </div>
+      <div class="brew" role="region" aria-label="Homebrew install command">
+        <span class="dollar">$</span>
+        <span class="cmd">brew install --cask Dnymte/tap/manfath</span>
+        <button class="copy" id="brewCopy" data-i18n="dl.copy">COPY</button>
+      </div>
+      <div class="fine">
+        <span data-i18n="dl.fine1">Prefer the raw .dmg?</span>
+        <a href="#" data-i18n="dl.fine2">Grab it from GitHub releases</a>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════ FOOTER ═════════════════ -->
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="#">GitHub</a>
+    <a href="#">Twitter / X</a>
+    <a href="#">MIT</a>
+    <span data-i18n="foot.made">Made with care.</span>
+  </div>
+</footer>
+
+
+<!-- Scripts in dependency order. Plain <script src> (no defer/async)
+     so later modules can rely on earlier globals. -->
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/hero.js"></script>
+<script src="assets/js/threads.js"></script>
+<script src="assets/js/tunnel-demo.js"></script>
+<script src="assets/js/brew.js"></script>
+<script src="assets/js/stats.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

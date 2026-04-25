@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: swift test
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          swift --version
+          xcodebuild -version
+
+      - name: Run tests
+        run: swift test --enable-test-discovery
+
+  build:
+    name: xcodebuild
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build (Debug, ad-hoc signing)
+        run: |
+          xcodebuild \
+            -project Manfath.xcodeproj \
+            -scheme Manfath \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build

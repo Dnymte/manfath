@@ -1,0 +1,41 @@
+name: Feature request
+description: Suggest something Manfath should do.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Manfath aims to do three things well — scan, kill, tunnel. The bar for adding scope is "this would meaningfully change my dev day, every day".
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem?
+      description: Describe the workflow that's painful today.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How would you ideally use Manfath to solve it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds you've tried, other tools that do this, etc.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Rough size
+      options:
+        - "small (couple hours)"
+        - "medium (a weekend)"
+        - "large (multiple weekends)"
+        - "I have no idea"
+      default: 3
