@@ -22,6 +22,18 @@ const HERO_NODES = [
   {port:"1313",  label:"hugo"},
 ];
 
+// Swap the hero SVG's preserveAspectRatio so phones see the whole
+// scene (`meet`, letterboxed) and desktops get the wall full-bleed
+// (`slice`, cropped). Re-runs on resize for orientation changes.
+function applyHeroAspect(){
+  const svg = document.getElementById('heroSvg');
+  if (!svg) return;
+  const isMobile = window.matchMedia('(max-width:1024px)').matches;
+  svg.setAttribute('preserveAspectRatio', isMobile ? 'xMidYMid meet' : 'xMidYMid slice');
+}
+applyHeroAspect();
+window.addEventListener('resize', applyHeroAspect);
+
 const heroController = (()=>{
   const svg        = document.getElementById('heroSvg');
   const threadsG   = document.getElementById('threads');

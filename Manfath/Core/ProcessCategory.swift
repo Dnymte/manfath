@@ -12,12 +12,16 @@ public enum ProcessCategory: String, Codable, Hashable, Sendable, CaseIterable {
     case system     // known macOS background services
     case unknown    // everything else
 
-    /// True for categories the user is most likely actively developing
-    /// against. Used by the "show only real servers" filter.
+    /// Used by the "show only real servers" filter. The rule we want
+    /// is "hide things we *positively know* are noise" — app helpers
+    /// (Slack, Adobe, …) and macOS system daemons. Everything else
+    /// shows, including ports we couldn't classify (e.g. gunicorn,
+    /// uvicorn, custom binaries) so the user isn't surprised when a
+    /// real dev server they just started doesn't appear.
     public var isRealServer: Bool {
         switch self {
-        case .devServer, .database, .runtime: return true
-        case .appHelper, .system, .unknown:   return false
+        case .devServer, .database, .runtime, .unknown: return true
+        case .appHelper, .system:                       return false
         }
     }
 }

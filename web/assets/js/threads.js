@@ -34,13 +34,15 @@ function drawStackThreads(){
     </defs>
   `;
   const cx = 600, cy = 230;
-  // core glow + node
+  // Core radial glow — always at the back.
   const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
   glow.setAttribute('cx', cx); glow.setAttribute('cy', cy);
   glow.setAttribute('r', 90); glow.setAttribute('fill','url(#coreGlow2)');
   svg.appendChild(glow);
 
-  // center "manfath" chip (mini port illustration)
+  // The center "Manfath" chip is built here but appended AFTER the
+  // threads + packets so it always renders on top of them. See the
+  // three-pass loop below.
   const chip = document.createElementNS('http://www.w3.org/2000/svg','g');
   chip.setAttribute('transform', `translate(${cx} ${cy})`);
   chip.innerHTML = `
@@ -61,7 +63,7 @@ function drawStackThreads(){
     <circle cx="-44" cy="-16" r="2" fill="#b8ff5c"/>
     <text x="0" y="40" font-family="Inter Tight, sans-serif" font-size="13" font-weight="700" fill="#e8e4da" text-anchor="middle" letter-spacing="-.01em">Manfath</text>
   `;
-  svg.appendChild(chip);
+  // Note: appended at the END of the function (after passes 1 + 2).
 
   // Three passes so the z-order is predictable:
   //   1. all paths (threads)         — bottom
@@ -116,7 +118,8 @@ function drawStackThreads(){
     svg.appendChild(packet);
   });
 
-  // PASS 3 — node chips on top of everything
+  // PASS 3 — center Manfath chip + surrounding node chips on top.
+  svg.appendChild(chip);
   positions.forEach(({node, x, y})=>{
     const g = document.createElementNS('http://www.w3.org/2000/svg','g');
     g.setAttribute('transform', `translate(${x} ${y})`);

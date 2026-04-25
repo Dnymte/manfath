@@ -60,9 +60,11 @@
   .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em}
   .brand-mark{width:22px;height:22px;display:block}
   .brand-name{font-size:17px}
-  .brand-ar{font-family:var(--arabic);font-weight:600;color:var(--ink-dim);font-size:15px;margin-inline-start:4px}
-  html[dir="rtl"] .brand-ar{color:var(--ink);font-weight:700;font-size:17px}
-  html[dir="rtl"] .brand-name{color:var(--ink-dim);font-weight:500;font-size:15px}
+  /* In LTR (English) we show the Latin name only; in RTL the Arabic
+     name takes its place. No "Manfath  منفذ" double-up. */
+  .brand-ar{font-family:var(--arabic);font-weight:700;color:var(--ink);font-size:17px;margin-inline-start:4px;display:none}
+  html[dir="rtl"] .brand-ar{display:inline}
+  html[dir="rtl"] .brand-name{display:none}
 
   .nav-links{display:flex;align-items:center;gap:28px;font-size:13.5px;color:var(--ink-dim)}
   .nav-links a:hover{color:var(--ink)}
@@ -120,11 +122,10 @@
     min-height:600px;
   }
   .hero-svg{
-    /* Anchor left + scale to ~78% so the hero-copy column on the
-       right gets real breathing room. The text floats over the
-       remaining space without fighting the laptop illustration. */
-    position:absolute;inset:0 auto 0 0;
-    width:78%;height:100%;
+    /* Full-bleed: wall + floor cover the entire hero area. The
+       hero-copy floats on top with backdrop-blur for legibility. */
+    position:absolute;inset:0;
+    width:100%;height:100%;
     display:block;
   }
   .hero-copy{
@@ -163,10 +164,15 @@
   }
   .hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber)}
   h1.hero-title{
-    font-size:clamp(36px, 5.6vw, 72px);
-    font-weight:700;letter-spacing:-.035em;line-height:.98;
+    /* `min(8vw, 72px)` makes the phrase scale linearly with the
+       viewport up to a 72px cap. The 28px floor keeps the title
+       substantial on phones; "Kill what you don't need." just fits
+       at 28px / 6vw on 390px-wide screens. */
+    font-size:clamp(28px, 6vw, 72px);
+    font-weight:700;letter-spacing:-.035em;line-height:1;
     margin:0 0 22px;
     text-wrap:balance;
+    overflow-wrap:break-word;
   }
   html[dir="rtl"] h1.hero-title{font-family:var(--arabic);letter-spacing:0;line-height:1.15}
   h1 .lg-amber{color:var(--amber)}
@@ -181,11 +187,40 @@
     margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);
   }
 
-  @media (max-width:900px){
-    .hero-copy{position:relative;top:0;left:0;padding:0 24px;max-width:none}
-    html[dir="rtl"] .hero-copy{right:0;left:0;padding:0 24px}
+  @media (max-width:1024px){
+    .hero-copy{
+      position:relative;top:0;left:0;right:0;
+      padding:24px;
+      max-width:none;
+      box-sizing:border-box;
+      background:transparent;            /* solid card chrome reads heavy on small screens */
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
+      border:0;box-shadow:none;
+      /* Mobile reveal doesn't depend on the laptop animation chain —
+         show the copy immediately so a slow JS run doesn't leave a
+         blank screen. */
+      opacity:1 !important;
+      transform:none !important;
+    }
+    html[dir="rtl"] .hero-copy{right:0;left:0;padding:24px}
     .hero-stage{height:auto;min-height:0;display:flex;flex-direction:column-reverse}
-    .hero-svg{position:relative;width:100%;inset:auto;height:60vh;min-height:380px}
+    .hero-svg{
+      /* The SVG's viewBox is 1400×800 (7:4). Matching the container
+         to the same aspect means the laptop scene fills it edge-to-edge
+         with no letterbox bands above or below. Width-driven so the
+         scene scales naturally with the device width. */
+      position:relative;width:100%;inset:auto;
+      aspect-ratio:7/4;
+      height:auto;min-height:0;
+    }
+    /* `preserveAspectRatio` swap (slice → meet on mobile) lives in
+       hero.js — `preserveAspectRatio` is an SVG attribute, not CSS. */
+  }
+  @media (max-width:480px){
+    .hero-copy{padding:18px}
+    .hero-eyebrow{font-size:11px}
+    .hero-sub{font-size:15px}
   }
 
   /* ─── section shell ─── */
@@ -408,8 +443,11 @@
 
   /* ─── tunnel demo ─── */
   .tunnel-demo{
-    margin-top:64px;
-    height:260px;position:relative;
+    margin-top:64px;position:relative;
+    /* Use aspect-ratio so the demo stays proportional at every width.
+       Was a fixed 260px which crushed everything horizontally on phones. */
+    aspect-ratio: 1200 / 260;
+    min-height:200px;
     border:1px solid var(--line);border-radius:16px;overflow:hidden;
     background:var(--bg-1);
   }
@@ -421,6 +459,17 @@
     padding:10px 14px;border-radius:8px;display:flex;align-items:center;gap:10px;
     opacity:0;transition:opacity .4s, transform .5s cubic-bezier(.2,.9,.2,1);
     box-shadow:0 12px 40px -10px rgba(92,228,255,.2);
+    max-width:calc(100% - 32px);
+  }
+  /* Phones don't have room for a 4.6:1 strip — restack the demo into
+     a square-ish frame so the laptop, toast, and URL node all stay
+     readable without sub-pixel hairlines. */
+  @media (max-width:640px){
+    .tunnel-demo{
+      aspect-ratio: 5 / 4;
+      min-height:340px;
+    }
+    .toast{font-size:11px;padding:8px 10px;gap:8px}
   }
   .toast.in{opacity:1;transform:translate(-50%,-50%)}
   .toast .tick{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--cyan);display:inline-flex;align-items:center;justify-content:center}
@@ -500,8 +549,10 @@
   footer .marks .en{font-family:var(--serif);font-weight:600;letter-spacing:-.01em}
   footer .marks .ar{font-family:var(--arabic);font-weight:600;font-size:15px}
   footer .sep{color:var(--ink-faint)}
-  footer .links{display:flex;gap:20px}
+  footer .links{display:flex;gap:20px;align-items:center}
+  footer .links a{display:inline-flex;align-items:center;gap:6px}
   footer .links a:hover{color:var(--ink)}
+  footer .links a svg{display:block}
 
   /* ─── scroll reveal ─── */
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1)}

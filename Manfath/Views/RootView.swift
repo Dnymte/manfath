@@ -99,6 +99,15 @@ struct RootView: View {
                     RoundedRectangle(cornerRadius: 4)
                         .stroke(Theme.line, lineWidth: 1)
                 )
+
+            // ⌘K = kill the port typed in the search field. Power-user
+            // shortcut: type 8000, hit ⌘K, the matching PID gets a
+            // SIGTERM. Banner reports what was killed.
+            Button("") { killPortInSearch() }
+                .keyboardShortcut("k", modifiers: .command)
+                .frame(width: 0, height: 0)
+                .opacity(0)
+                .accessibilityHidden(true)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
@@ -193,6 +202,30 @@ struct RootView: View {
         }
     }
 
+    /// Parses the search field as a port number. If a live row matches,
+    /// kills that port's PID and flashes a confirmation banner. No-op
+    /// when the field isn't a valid port or no match is found.
+    private func killPortInSearch() {
+        let raw = store.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let portNum = UInt16(raw) else { return }
+        guard let port = store.filteredPorts.first(where: { $0.port == portNum }) else {
+            store.flashBanner(
+                String(localized: "popover.killShortcut.noMatch \(Int(portNum))"),
+                kind: .error
+            )
+            return
+        }
+        let pid = port.pid
+        Task {
+            await store.kill(pid: pid)
+            store.flashBanner(
+                String(localized: "popover.killShortcut.killed \(Int(portNum)) \(Int(pid))"),
+                kind: .success
+            )
+            store.searchText = ""
+        }
+    }
+
     private func handleTunnelMissing() {
         guard let provider = tunnelStore.activeProvider else { return }
         PasteboardService.copy(provider.installHint().command)
@@ -215,6 +248,17 @@ struct RootView: View {
             }
 
             Spacer()
+
+            Button {
+                Task { await store.refreshNow() }
+            } label: {
+                Image(systemName: "arrow.clockwise")
+                    .font(.system(size: 11))
+                    .foregroundStyle(Theme.inkFaint)
+            }
+            .buttonStyle(.plain)
+            .keyboardShortcut("r", modifiers: .command)
+            .help("popover.refreshNow")
 
             pinPresetMenu
 

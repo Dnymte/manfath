@@ -64,27 +64,44 @@ public enum CategoryClassifier {
         "wirelessproxd",
     ]
 
-    /// Generic interpreters that, on their own, tell us nothing about
-    /// what's running. Treated as `.runtime` unless a framework hint
-    /// upgrades them.
-    static let runtimeProcessNames: Set<String> = [
+    /// Base names for generic interpreters. `isRuntime(_:)` matches
+    /// these as-is *or* with a numeric/version suffix — so `python`,
+    /// `python3`, `python3.11`, `python3.12.4`, `ruby2.7`, `node20`
+    /// all classify the same.
+    static let runtimeBaseNames: [String] = [
         "node", "deno", "bun",
-        "python", "python3",
-        "ruby",
-        "java",
-        "dotnet",
-        "php",
-        "perl",
+        "python", "ruby", "java",
+        "dotnet", "php", "perl",
     ]
+
+    /// True when `name` is a known interpreter, with or without a
+    /// version-style suffix.
+    static func isRuntime(_ name: String) -> Bool {
+        let lower = name.lowercased()
+        for base in runtimeBaseNames {
+            if lower == base { return true }
+            if lower.hasPrefix(base) {
+                let suffix = lower.dropFirst(base.count)
+                // Accepts "3", "3.10", "3.12.4", "2.7", "-3.11", etc.
+                if !suffix.isEmpty,
+                   suffix.allSatisfy({ $0.isNumber || $0 == "." || $0 == "-" }) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
     /// Decide the category for a port given everything we know about it.
     /// Order of precedence:
-    ///   1. Framework hint present → devServer (interpreters running
-    ///      something we recognize)
+    ///   1. Framework hint present → devServer
     ///   2. Process name matches a known database
-    ///   3. Executable lives inside `.app/Contents/MacOS/` → appHelper
-    ///   4. Process name matches a known macOS service
-    ///   5. Process name is a generic interpreter → runtime
+    ///   3. Process name is a known interpreter (`python`, `node`, …)
+    ///      — wins over the `.app` heuristic below, because Python from
+    ///      Xcode and similar bundled interpreters live inside
+    ///      `.app/Contents/MacOS/` but are absolutely real dev runtimes.
+    ///   4. Executable lives inside `.app/Contents/MacOS/` → appHelper
+    ///   5. Process name matches a known macOS service → system
     ///   6. Otherwise unknown
     public static func classify(
         processName: String,
@@ -101,16 +118,16 @@ public enum CategoryClassifier {
             return .database
         }
 
+        if isRuntime(processName) {
+            return .runtime
+        }
+
         if let exe = executablePath, exe.contains(".app/Contents/MacOS/") {
             return .appHelper
         }
 
         if systemProcessNames.contains(lower) {
             return .system
-        }
-
-        if runtimeProcessNames.contains(lower) {
-            return .runtime
         }
 
         return .unknown

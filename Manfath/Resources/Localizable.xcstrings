@@ -867,6 +867,27 @@
         "ar" : { "stringUnit" : { "state" : "translated", "value" : "تلقائي (أول مثبّت)" } }
       }
     },
+    "popover.killShortcut.noMatch %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No live process on port %lld" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "لا توجد عملية نشطة على المنفذ %lld" } }
+      }
+    },
+    "popover.killShortcut.killed %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Killed PID %2$lld on port %1$lld" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "تم إنهاء PID %2$lld على المنفذ %1$lld" } }
+      }
+    },
+    "popover.refreshNow" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Refresh now (⌘R)" } },
+        "ar" : { "stringUnit" : { "state" : "translated", "value" : "تحديث الآن (⌘R)" } }
+      }
+    },
     "popover.pinMenu.help" : {
       "extractionState" : "manual",
       "localizations" : {
