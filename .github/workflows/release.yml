@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build, sign, notarize, publish
-    runs-on: macos-14
+    runs-on: macos-15
 
     permissions:
       contents: write   # needed to create / edit releases
@@ -16,6 +16,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Select latest Xcode 16
+        run: |
+          XC=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XC" ]; then XC=$(ls -d /Applications/Xcode*.app | sort -V | tail -1); fi
+          echo "Using $XC"
+          sudo xcode-select -s "$XC"
 
       - name: Show toolchain
         run: |
