@@ -3,7 +3,60 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Manfath — See every port. Kill what you don't need. Share the rest.</title>
+<meta name="theme-color" content="#0a0a0c" />
+
+<title id="docTitle">Manfath — See every port. Kill what you don't need. Share the rest.</title>
+<meta id="metaDesc" name="description" content="Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click. No accounts, no telemetry." />
+<meta name="keywords" content="macOS, menu bar, localhost, ports, lsof, tunnel, ngrok, cloudflared, developer tools, open source" />
+<meta name="author" content="Manfath contributors" />
+<link rel="canonical" href="https://manfath.dev/" />
+
+<!-- Localized alternates -->
+<link rel="alternate" hreflang="en" href="https://manfath.dev/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/?lang=ar" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/" />
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<link rel="mask-icon" href="assets/favicon.svg" color="#b8ff5c" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="Manfath — See every port. Kill what you don't need. Share the rest." />
+<meta property="og:description" content="Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click." />
+<meta property="og:url" content="https://manfath.dev/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Manfath — see every port, kill what you don't need, share the rest." />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="ar_SA" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Manfath — See every port. Kill what you don't need. Share the rest." />
+<meta name="twitter:description" content="Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click." />
+<meta name="twitter:image" content="https://manfath.dev/assets/og.png" />
+
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Manfath",
+  "operatingSystem": "macOS 14+",
+  "applicationCategory": "DeveloperApplication",
+  "url": "https://manfath.dev/",
+  "downloadUrl": "https://github.com/Dnymte/manfath/releases/latest",
+  "softwareVersion": "1.0.0",
+  "license": "https://github.com/Dnymte/manfath/blob/main/LICENSE",
+  "description": "Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -810,7 +863,7 @@
       <p class="sect-sub" style="margin:0 auto" data-i18n="dl.sub">Universal binary — Apple Silicon and Intel. macOS 12 Monterey or later.</p>
       <div class="download-row" style="margin-top:32px">
         <a class="btn btn-primary" href="https://github.com/Dnymte/manfath/releases/latest" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 13.3c0-2.9 2.3-4.2 2.4-4.3-1.3-1.9-3.4-2.2-4.1-2.2-1.7-.2-3.4 1-4.3 1-.9 0-2.3-1-3.8-1-1.9 0-3.7 1.1-4.7 2.9-2 3.5-.5 8.7 1.4 11.5 1 1.4 2.1 3 3.6 2.9 1.5-.1 2-.9 3.8-.9s2.2.9 3.8.9c1.6 0 2.6-1.4 3.5-2.8 1.1-1.6 1.6-3.2 1.6-3.2-.1 0-3.2-1.2-3.2-4.8z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.6 13.3c0-2.9 2.3-4.2 2.4-4.3-1.3-1.9-3.4-2.2-4.1-2.2-1.7-.2-3.4 1-4.3 1-.9 0-2.3-1-3.8-1-1.9 0-3.7 1.1-4.7 2.9-2 3.5-.5 8.7 1.4 11.5 1 1.4 2.1 3 3.6 2.9 1.5-.1 2-.9 3.8-.9s2.2.9 3.8.9c1.6 0 2.6-1.4 3.5-2.8 1.1-1.6 1.6-3.2 1.6-3.2-.1 0-3.2-1.2-3.2-4.8zM14.7 5.1c.8-1 1.4-2.4 1.2-3.8-1.2.1-2.6.8-3.4 1.8-.8.9-1.4 2.3-1.2 3.7 1.3.1 2.7-.7 3.4-1.7z"/></svg>
           <span data-i18n="dl.primary">Download Manfath 1.0.0</span>
         </a>
         <a class="btn btn-ghost" href="https://github.com/Dnymte/manfath/releases" target="_blank" rel="noopener"><span data-i18n="dl.releases">All releases</span></a>

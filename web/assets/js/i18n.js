@@ -55,7 +55,9 @@ const I18N = {
     "dl.copy":"COPY",
     "dl.fine1":"Prefer the raw .dmg?",
     "dl.fine2":"Grab it from GitHub releases",
-    "foot.made":"Made with care."
+    "foot.made":"Made with care.",
+    "meta.title":"Manfath — See every port. Kill what you don't need. Share the rest.",
+    "meta.description":"Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click. No accounts, no telemetry."
   },
   ar:{
     "brand":"منفذ",
@@ -108,7 +110,9 @@ const I18N = {
     "dl.copy":"نسخ",
     "dl.fine1":"تفضّل ملف .dmg مباشرة؟",
     "dl.fine2":"احصل عليه من إصدارات GitHub",
-    "foot.made":"صُنع بعناية."
+    "foot.made":"صُنع بعناية.",
+    "meta.title":"منفذ — شاهد كل منفذ. أوقف ما لا تحتاجه. شارك الباقي.",
+    "meta.description":"تطبيق مجاني ومفتوح المصدر لشريط القوائم في macOS يعرض كل منفذ localhost — مسح وإنهاء وأنفاق بنقرة واحدة. بلا حسابات، بلا تتبّع."
   }
 };
 
@@ -122,6 +126,12 @@ function applyLang(lang){
     const key = el.getAttribute('data-i18n');
     if(I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
   });
+  // Swap localized SEO so crawlers and shares see the right strings.
+  const title = I18N[lang]['meta.title'];
+  const desc  = I18N[lang]['meta.description'];
+  if(title) document.title = title;
+  const metaDesc = document.getElementById('metaDesc');
+  if(metaDesc && desc) metaDesc.setAttribute('content', desc);
   document.getElementById('lang-en').classList.toggle('on', !isAR);
   document.getElementById('lang-en').setAttribute('aria-pressed', String(!isAR));
   document.getElementById('lang-ar').classList.toggle('on', isAR);
