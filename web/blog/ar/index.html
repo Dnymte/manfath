@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0a0c" />
+
+<title>المدوّنة — Manfath</title>
+<meta name="description" content="أدلّة عملية حول منافذ localhost وإنهاء العمليات العالقة والأنفاق على macOS. من فريق Manfath، تطبيق شريط القوائم المجاني." />
+<meta name="keywords" content="macOS, localhost, منافذ, lsof, نفق, ngrok, EADDRINUSE, إنهاء عملية, أدوات مطوّرين" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+
+<link rel="canonical" href="https://manfath.dev/blog/ar/" />
+<link rel="alternate" hreflang="en" href="https://manfath.dev/blog/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/" />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+<link rel="mask-icon" href="/assets/favicon.svg" color="#b8ff5c" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="المدوّنة — Manfath" />
+<meta property="og:description" content="أدلّة عملية حول منافذ localhost وإنهاء العمليات العالقة والأنفاق على macOS." />
+<meta property="og:url" content="https://manfath.dev/blog/ar/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:locale" content="ar_SA" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Blog",
+      "@id": "https://manfath.dev/blog/ar/#blog",
+      "name": "مدوّنة Manfath",
+      "url": "https://manfath.dev/blog/ar/",
+      "inLanguage": "ar",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Manfath",
+        "url": "https://manfath.dev/",
+        "logo": "https://manfath.dev/assets/apple-touch-icon.png"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "المدوّنة", "item": "https://manfath.dev/blog/ar/" }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "name": "تدوينات Manfath",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "url": "https://manfath.dev/blog/ar/find-process-on-port-macos/", "name": "كيف تعرف العملية التي تستخدم منفذاً ما على macOS" },
+        { "@type": "ListItem", "position": 2, "url": "https://manfath.dev/blog/ar/port-already-in-use-macos/", "name": "حلّ خطأ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS" },
+        { "@type": "ListItem", "position": 3, "url": "https://manfath.dev/blog/ar/localhost-tunneling-alternatives/", "name": "بدائل مجانية لـ ngrok لأنفاق localhost" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="/?lang=ar">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-ar" style="display:inline">منفذ</span>
+  </a>
+  <div class="nav-links">
+    <a href="/?lang=ar" class="hide-sm">الرئيسية</a>
+    <a href="/?lang=ar#features" class="hide-sm">الميزات</a>
+    <a href="/?lang=ar#download" class="hide-sm">تحميل</a>
+    <div class="lang" role="group" aria-label="اللغة">
+      <a id="lang-en" href="/blog/">EN</a>
+      <a id="lang-ar" class="on ar-btn" href="/blog/ar/" aria-current="page">ع</a>
+    </div>
+  </div>
+</nav>
+
+<main class="blog-shell">
+  <div class="blog-crumbs">
+    <a href="/?lang=ar">Manfath</a>
+    <span class="sep">/</span>
+    <span>المدوّنة</span>
+  </div>
+
+  <header class="blog-hero">
+    <h1>ملاحظات من شريط القوائم.</h1>
+    <p>أدلّة قصيرة وعملية حول منافذ localhost، وإنهاء العمليات العالقة، والأنفاق على macOS — مكتوبة لمطوّرين يفضّلون العودة سريعاً إلى البرمجة.</p>
+  </header>
+
+  <section class="blog-list" aria-label="التدوينات">
+
+    <a class="blog-card" href="/blog/ar/find-process-on-port-macos/">
+      <div class="meta">
+        <span>درس</span><span class="dot">·</span><span>2026-04-26</span><span class="dot">·</span><span>6 دقائق قراءة</span>
+      </div>
+      <h2>كيف تعرف العملية التي تستخدم منفذاً ما على macOS</h2>
+      <p>ثلاث طرق موثوقة لربط المنفذ بالعملية المستخدمة له — <code>lsof</code> و <code>netstat</code>، وعرض شريط القوائم بنقرة واحدة. مع المطبّات التي تواجه مستخدمي Mac لأول مرة.</p>
+    </a>
+
+    <a class="blog-card" href="/blog/ar/port-already-in-use-macos/">
+      <div class="meta">
+        <span>استكشاف أخطاء</span><span class="dot">·</span><span>2026-04-26</span><span class="dot">·</span><span>7 دقائق قراءة</span>
+      </div>
+      <h2>حلّ خطأ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS</h2>
+      <p>لماذا تَعلَق المنافذ بعد التعطّل، والطريقة الآمنة لتحريرها، ولماذا <code>kill -9</code> ليست الخطوة الأولى تقريباً أبداً. أمثلة عملية لـ Node و Vite و Rails و Docker.</p>
+    </a>
+
+    <a class="blog-card" href="/blog/ar/localhost-tunneling-alternatives/">
+      <div class="meta">
+        <span>مقارنة</span><span class="dot">·</span><span>2026-04-26</span><span class="dot">·</span><span>8 دقائق قراءة</span>
+      </div>
+      <h2>بدائل مجانية لـ ngrok لأنفاق localhost</h2>
+      <p>نظرة جنباً إلى جنب على Cloudflare Tunnel و localhost.run و bore و tailscale-funnel — ما يجيده كلٌّ منها، وكلفته، ومتى تختار أيّها لمشاركة خادم تطوير محلي.</p>
+    </a>
+
+  </section>
+
+</main>
+
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://github.com/Dnymte/manfath/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+  </div>
+</footer>
+
+</body>
+</html>

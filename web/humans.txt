@@ -1,0 +1,16 @@
+/* TEAM */
+  Project: Manfath (منفذ)
+  Site:    https://manfath.dev
+  Source:  https://github.com/Dnymte/manfath
+  License: MIT
+
+/* THANKS */
+  Everyone who's filed an issue, sent a PR, or starred the repo.
+
+/* SITE */
+  Last update:  2026-04-26
+  Language:     English, Arabic
+  Doctype:      HTML5
+  Standards:    HTML5, CSS3, ES2017+
+  Components:   Hand-rolled. No build step.
+  Software:     Swift, SwiftUI, AppKit (the app itself)

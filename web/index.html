@@ -7,9 +7,16 @@
 
 <title id="docTitle">Manfath — See every port. Kill what you don't need. Share the rest.</title>
 <meta id="metaDesc" name="description" content="Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click. No accounts, no telemetry." />
-<meta name="keywords" content="macOS, menu bar, localhost, ports, lsof, tunnel, ngrok, cloudflared, developer tools, open source" />
+<meta name="keywords" content="macOS, menu bar, localhost, ports, lsof, tunnel, ngrok, cloudflared, developer tools, open source, EADDRINUSE, port already in use, kill process on port, free ngrok alternative" />
 <meta name="author" content="Manfath contributors" />
+<meta name="application-name" content="Manfath" />
+<meta name="apple-mobile-web-app-title" content="Manfath" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow" />
 <link rel="canonical" href="https://manfath.dev/" />
+
+<!-- LLM / AI crawlers: pointer to a plain-text site brief. -->
+<link rel="alternate" type="text/plain" title="LLM-friendly site summary" href="/llms.txt" />
 
 <!-- Localized alternates -->
 <link rel="alternate" hreflang="en" href="https://manfath.dev/" />
@@ -40,20 +47,129 @@
 <meta name="twitter:description" content="Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click." />
 <meta name="twitter:image" content="https://manfath.dev/assets/og.png" />
 
-<!-- Schema.org -->
+<!-- Schema.org — multiple graphs so search and AI crawlers
+     can pick the entity that matches their slot. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Manfath",
-  "operatingSystem": "macOS 14+",
-  "applicationCategory": "DeveloperApplication",
-  "url": "https://manfath.dev/",
-  "downloadUrl": "https://github.com/Dnymte/manfath/releases/latest",
-  "softwareVersion": "1.0.0",
-  "license": "https://github.com/Dnymte/manfath/blob/main/LICENSE",
-  "description": "Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click.",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://manfath.dev/#app",
+      "name": "Manfath",
+      "alternateName": ["منفذ", "Manfath for macOS"],
+      "operatingSystem": "macOS 14 Sonoma or later",
+      "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Menu bar utility",
+      "url": "https://manfath.dev/",
+      "downloadUrl": "https://github.com/Dnymte/manfath/releases/latest",
+      "installUrl": "https://github.com/Dnymte/manfath/releases/latest",
+      "softwareVersion": "1.0.0",
+      "fileSize": "≈4 MB",
+      "license": "https://github.com/Dnymte/manfath/blob/main/LICENSE",
+      "description": "Free, open-source macOS menu bar app that lists every listening localhost port, kills stuck processes with one click, and exposes any port to the public internet via Cloudflare or ngrok tunnels. No accounts, no telemetry.",
+      "featureList": [
+        "Live scan of TCP/UDP/IPv4/IPv6 listening ports every 3 seconds",
+        "One-click process kill (SIGTERM then SIGKILL)",
+        "One-click public tunnel via Cloudflare, ngrok, or custom command",
+        "Search and filter by port, process, or PID",
+        "Keyboard shortcut to open from anywhere",
+        "Universal binary for Apple Silicon and Intel",
+        "Full English and Arabic (RTL) localization"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@id": "https://manfath.dev/#org" },
+      "publisher": { "@id": "https://manfath.dev/#org" },
+      "isAccessibleForFree": true,
+      "inLanguage": ["en", "ar"]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://manfath.dev/#org",
+      "name": "Manfath",
+      "url": "https://manfath.dev/",
+      "logo": "https://manfath.dev/assets/apple-touch-icon.png",
+      "sameAs": [
+        "https://github.com/Dnymte/manfath",
+        "https://github.com/Dnymte"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://manfath.dev/#site",
+      "url": "https://manfath.dev/",
+      "name": "Manfath",
+      "publisher": { "@id": "https://manfath.dev/#org" },
+      "inLanguage": ["en", "ar"]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Manfath?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Manfath is a free, open-source macOS menu bar app that lists every listening localhost port on your machine. It shows the process and PID behind each port, lets you kill any process with one click, and exposes any local port to the public internet via Cloudflare Tunnel, ngrok, or a custom command. It runs entirely on your machine — no accounts, no telemetry."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I find what process is using a port on macOS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "From the terminal: run `lsof -nP -iTCP:3000 -sTCP:LISTEN` (replace 3000 with your port). The PID column tells you which process owns the port. With Manfath, the same information is one click away in the menu bar — every listening port, sorted by activity, refreshed every 3 seconds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I kill a process running on a specific port on macOS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "From the terminal: `kill -9 $(lsof -ti :3000)` will force-kill whatever is listening on port 3000. Use SIGTERM first (`kill <pid>`) when you can — it lets the process clean up. Manfath does both automatically: SIGTERM first, escalating to SIGKILL only if the process refuses to exit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Manfath really free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Manfath is MIT-licensed and free forever. There is no paid tier, no telemetry, and no account. The full source is on GitHub at github.com/Dnymte/manfath."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's a free alternative to ngrok on macOS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cloudflare Tunnel (`cloudflared`) gives you free, unlimited, named public URLs for any localhost port. Other options include localhost.run, bore, and tailscale-funnel. Manfath ships with Cloudflare and ngrok built-in — pick a port, click Tunnel, the public URL lands in your clipboard."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Manfath work with Docker, Vite, Next.js, Rails, etc.?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Manfath sees processes, not frameworks — anything that opens a listening socket on macOS shows up. That includes Vite, Next.js, Rails/Puma, Django, Express, FastAPI, Postgres, Redis, Docker-mapped host ports, and so on."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between Manfath and just using lsof?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "`lsof` is great when you already know the port and you're already in a terminal. Manfath is the always-visible, sortable, filterable, killable, tunnel-able view of everything that's listening — designed for the case where you don't yet know what's running, or where you want to free a port without leaving your editor."
+          }
+        }
+      ]
+    }
+  ]
 }
 </script>
 
@@ -82,6 +198,7 @@
   <div class="nav-links">
     <a href="#features" class="hide-sm" data-i18n="nav.features">Features</a>
     <a href="#oss" class="hide-sm" data-i18n="nav.oss">Open source</a>
+    <a href="/blog/" class="hide-sm" data-i18n="nav.blog" data-blog-link>Blog</a>
     <a href="#download" class="hide-sm" data-i18n="nav.download">Download</a>
     <div class="lang" role="group" aria-label="Language">
       <button id="lang-en" class="on" aria-pressed="true">EN</button>
@@ -851,6 +968,49 @@
       <span data-i18n="privacy.3">unless</span>
       <span class="hi" data-i18n="privacy.4">you</span>
       <span data-i18n="privacy.5">tunnel it.</span>
+    </p>
+  </div>
+</section>
+
+<section class="block faq" id="faq" aria-labelledby="faq-title">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow" data-i18n="faq.eyebrow">Common questions</span>
+      <h2 class="sect" id="faq-title" data-i18n="faq.title">Things developers ask before they install.</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item">
+        <summary data-i18n="faq.q1">What is Manfath, exactly?</summary>
+        <div class="faq-a" data-i18n="faq.a1">Manfath is a free, open-source macOS menu bar app. It lists every listening localhost port on your machine, shows the process and PID behind each one, lets you kill any process with one click, and exposes any local port to the public internet via Cloudflare or ngrok. It runs entirely on your machine — no accounts, no telemetry.</div>
+      </details>
+      <details class="faq-item">
+        <summary data-i18n="faq.q2">How do I find what's running on port 3000 on macOS?</summary>
+        <div class="faq-a" data-i18n="faq.a2">From the terminal: <code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code>. The PID column tells you which process owns the port. With Manfath, the same answer is in your menu bar — every port, refreshed every 3 seconds, sorted by activity.</div>
+      </details>
+      <details class="faq-item">
+        <summary data-i18n="faq.q3">How do I kill a process on a port?</summary>
+        <div class="faq-a" data-i18n="faq.a3">CLI: <code>kill -9 $(lsof -ti :3000)</code>. Manfath does the same with one click — SIGTERM first (so the process can clean up), escalating to SIGKILL only if it refuses to exit.</div>
+      </details>
+      <details class="faq-item">
+        <summary data-i18n="faq.q4">Is it really free?</summary>
+        <div class="faq-a" data-i18n="faq.a4">Yes. MIT-licensed, no paid tier, no upsell, no telemetry. The full source is on GitHub.</div>
+      </details>
+      <details class="faq-item">
+        <summary data-i18n="faq.q5">What's a free alternative to ngrok?</summary>
+        <div class="faq-a" data-i18n="faq.a5">Cloudflare Tunnel (<code>cloudflared</code>) is free and unlimited. Manfath ships with Cloudflare and ngrok built-in — pick a port, click Tunnel, the public URL lands in your clipboard.</div>
+      </details>
+      <details class="faq-item">
+        <summary data-i18n="faq.q6">Does it work with Docker, Vite, Next.js, Rails…?</summary>
+        <div class="faq-a" data-i18n="faq.a6">Yes — Manfath sees processes, not frameworks. Anything that opens a listening socket on macOS shows up: Vite, Next.js, Rails, Django, Express, FastAPI, Postgres, Redis, Docker-mapped host ports, and so on.</div>
+      </details>
+      <details class="faq-item">
+        <summary data-i18n="faq.q7">Why not just use lsof?</summary>
+        <div class="faq-a" data-i18n="faq.a7">Use it when you already know the port and you're already in a terminal. Manfath is the always-visible, sortable, filterable, killable, tunnel-able view of <em>everything</em> that's listening — for the case where you don't yet know what's running.</div>
+      </details>
+    </div>
+    <p class="faq-more reveal">
+      <span data-i18n="faq.more">Longer reads on</span>
+      <a href="/blog/" data-blog-link data-i18n="faq.more.link">the Manfath blog</a>.
     </p>
   </div>
 </section>

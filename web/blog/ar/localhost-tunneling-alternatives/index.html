@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0a0c" />
+
+<title>بدائل مجانية لـ ngrok لأنفاق localhost على macOS — Manfath</title>
+<meta name="description" content="Cloudflare Tunnel و localhost.run و bore و tailscale-funnel — ما يجيده كلٌّ منها وكلفته ومتى تختار أيّها لمشاركة خادم localhost." />
+<meta name="keywords" content="بديل ngrok مجاني, نفق localhost, cloudflared, cloudflare tunnel, tailscale funnel, localhost.run, bore, كشف localhost ماك" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Manfath" />
+
+<link rel="canonical" href="https://manfath.dev/blog/ar/localhost-tunneling-alternatives/" />
+<link rel="alternate" hreflang="en" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/localhost-tunneling-alternatives/" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="بدائل مجانية لـ ngrok لأنفاق localhost على macOS" />
+<meta property="og:description" content="نظرة مقارنة على Cloudflare Tunnel و localhost.run و bore و tailscale-funnel." />
+<meta property="og:url" content="https://manfath.dev/blog/ar/localhost-tunneling-alternatives/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:locale" content="ar_SA" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta property="article:published_time" content="2026-04-26T00:00:00Z" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://manfath.dev/blog/ar/localhost-tunneling-alternatives/#post",
+      "headline": "بدائل مجانية لـ ngrok لأنفاق localhost على macOS",
+      "description": "نظرة مقارنة على Cloudflare Tunnel و localhost.run و bore و tailscale-funnel — ما يجيده كلٌّ منها ومتى تختار أيّها.",
+      "url": "https://manfath.dev/blog/ar/localhost-tunneling-alternatives/",
+      "datePublished": "2026-04-26",
+      "dateModified": "2026-04-26",
+      "inLanguage": "ar",
+      "image": "https://manfath.dev/assets/og.png",
+      "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
+      "publisher": {
+        "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/",
+        "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
+      },
+      "mainEntityOfPage": "https://manfath.dev/blog/ar/localhost-tunneling-alternatives/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "المدوّنة", "item": "https://manfath.dev/blog/ar/" },
+        { "@type": "ListItem", "position": 3, "name": "بدائل ngrok المجانية", "item": "https://manfath.dev/blog/ar/localhost-tunneling-alternatives/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="/?lang=ar">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-ar" style="display:inline">منفذ</span>
+  </a>
+  <div class="nav-links">
+    <a href="/?lang=ar" class="hide-sm">الرئيسية</a>
+    <a href="/blog/ar/" class="hide-sm">المدوّنة</a>
+    <a href="/?lang=ar#download" class="hide-sm">تحميل</a>
+    <div class="lang" role="group" aria-label="اللغة">
+      <a id="lang-en" href="/blog/localhost-tunneling-alternatives/">EN</a>
+      <a id="lang-ar" class="on ar-btn" href="/blog/ar/localhost-tunneling-alternatives/" aria-current="page">ع</a>
+    </div>
+  </div>
+</nav>
+
+<main class="blog-shell">
+  <div class="blog-crumbs">
+    <a href="/?lang=ar">Manfath</a>
+    <span class="sep">/</span>
+    <a href="/blog/ar/">المدوّنة</a>
+    <span class="sep">/</span>
+    <span>بدائل ngrok المجانية</span>
+  </div>
+
+  <article class="post">
+    <div class="post-meta">مقارنة · 2026-04-26 · 8 دقائق قراءة</div>
+    <h1>بدائل مجانية لـ ngrok لأنفاق localhost</h1>
+    <p class="lede">تحتاج مشاركة خادم تطوير محلّي مع زميل أو عميل أو هاتفك أو مزوّد webhooks — وارتطمت بحدود الباقة المجانية في ngrok وروابطها العشوائية المتغيّرة. إليك أربعة بدائل مجانية تستحقّ، مع المفاضلات التي تُحدّد أيّها يناسب موقفك.</p>
+
+    <h2>القائمة المختصرة</h2>
+    <p>ملخّصات بسطر واحد:</p>
+    <table>
+      <thead><tr><th>الأداة</th><th>مجاني</th><th>نطاق مخصّص</th><th>دعم TCP</th><th>تتطلّب حساباً</th></tr></thead>
+      <tbody>
+        <tr><td>Cloudflare Tunnel</td><td>نعم — بلا حدود</td><td>نعم (نطاقك)</td><td>محدود</td><td>حساب Cloudflare</td></tr>
+        <tr><td>localhost.run</td><td>نعم — رابط عشوائي</td><td>مدفوع فقط</td><td>HTTP/HTTPS فقط</td><td>لا (مفتاح SSH)</td></tr>
+        <tr><td>bore</td><td>نعم — قابل للاستضافة الذاتية</td><td>عند الاستضافة الذاتية</td><td>نعم (TCP خام)</td><td>لا</td></tr>
+        <tr><td>tailscale-funnel</td><td>نعم (3 أنفاق)</td><td>نطاق Tailscale فرعي</td><td>HTTPS فقط</td><td>حساب Tailscale</td></tr>
+        <tr><td>ngrok (مجاني)</td><td>نعم</td><td>لا</td><td>نعم (بحدود)</td><td>حساب ngrok</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Cloudflare Tunnel — الخيار الافتراضي للأكثرية</h2>
+    <p>Cloudflare Tunnel (الـdaemon اسمه <code>cloudflared</code>) هو أقوى خيار مجاني في 2026. مجاني، بلا حدود، يدعم النطاقات المخصّصة إن كان لديك واحد على Cloudflare، ويعمل كـdaemon طويل الأمد يمكنك تركه شغّالاً.</p>
+    <p>صياغة الرابط القابل للمشاركة في 30 ثانية (بلا حساب، بلا نطاق) أمر واحد:</p>
+    <pre><code>brew install cloudflared
+cloudflared tunnel --url http://localhost:3000</code></pre>
+    <p>المخرجات:</p>
+    <pre><code>Your quick Tunnel has been created! Visit it at:
+  https://random-words-here.trycloudflare.com</code></pre>
+    <p>الرابط يتغيّر مع كل إعادة تشغيل. إن أردت رابطاً ثابتاً على نطاقك الخاص، تدفّق «النفق المُسمّى» إعداد لمرة واحدة في خمس دقائق.</p>
+    <p><strong>اختر Cloudflare عندما:</strong> تريد افتراضياً مجانياً يتدرّج من «شارك الرابط في خمس ثوانٍ» إلى «نفق إنتاجي على نطاقي» دون تغيير الأداة.</p>
+
+    <h2>localhost.run — بدون تثبيت، بـSSH فقط</h2>
+    <p>إن لم ترغب بتثبيت <em>أيّ شيء</em>، فـlocalhost.run هي الإجابة. تستخدم SSH المثبّتة سلفاً على macOS:</p>
+    <pre><code>ssh -R 80:localhost:3000 nokey@localhost.run</code></pre>
+    <p>ستحصل على رابط عشوائي بصيغة <code>*.lhr.life</code>. الباقة المجانية HTTP/HTTPS فقط والرابط مؤقّت.</p>
+    <p><strong>اختر localhost.run عندما:</strong> تكون على جهاز شخص آخر، لا تستطيع التثبيت، وتحتاج الرابط مرة فقط.</p>
+
+    <h2>bore — بسيط وقابل للاستضافة الذاتية</h2>
+    <p><a href="https://github.com/ekzhang/bore" target="_blank" rel="noopener">bore</a> خادم نفق صغير بلغة Rust. النسخة المستضافة مجانية؛ ويمكنك تشغيل خادمك الخاص على VPS بـ5 دولارات في خمس دقائق.</p>
+    <pre><code>brew install bore-cli
+bore local 3000 --to bore.pub</code></pre>
+    <p>على عكس الخيارات HTTP-only، يدعم bore أنفاق TCP الخام، أي يصلح لأشياء مثل Postgres و Redis وحتى SSH.</p>
+    <p><strong>اختر bore عندما:</strong> تحتاج TCP (لا HTTP فقط)، أو تريد تشغيل خادم نفق خاص بك بلا تعقيد.</p>
+
+    <h2>tailscale-funnel — الخيار الصحيح إن كنت أصلاً على Tailscale</h2>
+    <p>إن كان لديك Tailscale مُعَدّاً، فإن <code>tailscale funnel</code> يكشف أيّ خدمة HTTPS محلّية للإنترنت العام على نطاقك الفرعي <code>*.ts.net</code>. مجاني (3 أنفاق لكل حساب) وثابت عبر إعادات التشغيل.</p>
+    <pre><code>tailscale funnel 3000</code></pre>
+    <p>الرابط يبقى نفسه إلى الأبد، وهذا ممتاز لنقاط webhooks في التطوير.</p>
+    <p><strong>اختر tailscale-funnel عندما:</strong> تكون مستخدم Tailscale أصلاً وتريد رابطاً ثابتاً بلا أداة إضافية.</p>
+
+    <h2>ماذا عن ngrok نفسه؟</h2>
+    <p>الباقة المجانية في ngrok ما زالت تنفع لعروض سريعة. الحدود في 2026:</p>
+    <ul>
+      <li>الرابط عشوائي ويتغيّر مع كل إعادة تشغيل ما لم تُرَقِّ.</li>
+      <li>حدود على عرض النطاق وعدد الطلبات.</li>
+      <li>أصبحت أداتا الفحص وإعادة التشغيل مدفوعتين.</li>
+    </ul>
+    <p>إن كنت تحتاج تحديداً ميزات ngrok (فاحص الطلبات التفاعلي، إعادة التشغيل) فالاشتراك مبرَّر. أما لـ«أحتاج مجرّد رابط» فأيّ من الأربعة أعلاه أبسط.</p>
+
+    <div class="post-cta">
+      <div class="h">أنشئ نفقاً من شريط القوائم.</div>
+      <div class="b">يأتي Manfath بـCloudflare و ngrok مدمجَين. اختر منفذاً، انقر «نفق»، يُنسخ الرابط العام إلى حافظتك. أَضِف مزوّدك الخاص بأمر مخصّص في ثوانٍ.</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/?lang=ar#download">تحميل Manfath</a>
+        <a class="btn btn-ghost" href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+
+    <h2>تدفّق القرار</h2>
+    <ul>
+      <li><strong>تشارك خادم تطوير HTTP/HTTPS مع زميل؟</strong> Cloudflare Tunnel.</li>
+      <li><strong>مرة واحدة، لا تستطيع التثبيت؟</strong> localhost.run عبر SSH.</li>
+      <li><strong>تحتاج TCP خام (Postgres أو Redis أو SSH)؟</strong> bore.</li>
+      <li><strong>على Tailscale وتريد رابطاً ثابتاً؟</strong> tailscale-funnel.</li>
+      <li><strong>تريد فاحص طلبات ngrok تحديداً؟</strong> ابقَ مع ngrok.</li>
+    </ul>
+
+    <h2>ملاحظات أمنية — اقرأها مرة</h2>
+    <p>كل خيار هنا يكشف عملية تعمل على حاسوبك للإنترنت. هذا يعني:</p>
+    <ul>
+      <li>لا تُنفّق أسرار ملف <code>.env</code> مع التطبيق. كثير من خوادم التطوير يخدم <code>/static/</code> بسخاء.</li>
+      <li>إن كان تطبيقك يكتب ملفات، فحدّد نطاقها. طلب خبيث قد يملأ قرصك قبل أن تنتبه.</li>
+      <li>أَنهِ النفق بعد الانتهاء. بعض هذه الأدوات تنتهي تلقائياً؛ بعضها لا.</li>
+    </ul>
+    <p>يُظهر Manfath الأنفاق النشطة في شريط القوائم لتراها بنظرة واحدة.</p>
+
+    <hr>
+
+    <div class="post-foot">
+      <div class="h">اقرأ بعد ذلك</div>
+      <ul>
+        <li><a href="/blog/ar/find-process-on-port-macos/">كيف تعرف العملية التي تستخدم منفذاً ما على macOS</a></li>
+        <li><a href="/blog/ar/port-already-in-use-macos/">حلّ خطأ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://github.com/Dnymte/manfath/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+  </div>
+</footer>
+
+</body>
+</html>

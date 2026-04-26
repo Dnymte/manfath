@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0a0c" />
+
+<title>Fix "port already in use" (EADDRINUSE) on macOS — Manfath</title>
+<meta name="description" content="Why ports get stuck on macOS, the safe way to free them, and worked examples for Node, Vite, Rails, and Docker. Plus when SO_REUSEADDR fixes it for you." />
+<meta name="keywords" content="EADDRINUSE, port already in use mac, address already in use, macOS port stuck, Node EADDRINUSE, Vite port in use, free port mac" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Manfath" />
+
+<link rel="canonical" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+<link rel="alternate" hreflang="en" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/port-already-in-use-macos/" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="Fix &quot;port already in use&quot; (EADDRINUSE) on macOS" />
+<meta property="og:description" content="Why ports get stuck, the safe way to free them, and worked examples for Node, Vite, Rails, and Docker." />
+<meta property="og:url" content="https://manfath.dev/blog/port-already-in-use-macos/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="ar_SA" />
+<meta property="article:published_time" content="2026-04-26T00:00:00Z" />
+<meta property="article:modified_time" content="2026-04-26T00:00:00Z" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://manfath.dev/blog/port-already-in-use-macos/#post",
+      "headline": "Fix \"port already in use\" (EADDRINUSE) on macOS",
+      "description": "Why ports get stuck on macOS, the safe way to free them, and worked examples for Node, Vite, Rails, and Docker.",
+      "url": "https://manfath.dev/blog/port-already-in-use-macos/",
+      "datePublished": "2026-04-26",
+      "dateModified": "2026-04-26",
+      "inLanguage": "en",
+      "image": "https://manfath.dev/assets/og.png",
+      "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Manfath",
+        "url": "https://manfath.dev/",
+        "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
+      },
+      "mainEntityOfPage": "https://manfath.dev/blog/port-already-in-use-macos/"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does EADDRINUSE mean?",
+          "acceptedAnswer": { "@type": "Answer", "text": "EADDRINUSE is the POSIX error code for 'address already in use'. The OS returns it when a process tries to bind() to a TCP or UDP port that another process is already listening on." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the port still in use after I closed the terminal?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Closing the terminal doesn't always kill the child process. If the parent shell exited but the server detached itself, or if a launcher (nodemon, npm, foreman) forked a child that's still running, the listener stays bound. Find it with `lsof -ti :PORT` and kill it." }
+        },
+        {
+          "@type": "Question",
+          "name": "Should I use kill -9?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Not as a first move. SIGTERM (`kill <pid>`) lets the process unbind cleanly and flush state. SIGKILL (`kill -9`) is unstoppable but skips cleanup, which can leave temp files, lock files, or sockets in TIME_WAIT. Use it only if SIGTERM doesn't work within a few seconds." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is TIME_WAIT and does it cause EADDRINUSE?",
+          "acceptedAnswer": { "@type": "Answer", "text": "TIME_WAIT is the TCP state a socket enters after close, kept around for ~30–120s to handle delayed packets. It can block re-bind on the same port unless the server sets SO_REUSEADDR. Most modern frameworks set it for you; if you're hand-rolling sockets, opt in." }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://manfath.dev/blog/" },
+        { "@type": "ListItem", "position": 3, "name": "EADDRINUSE on macOS", "item": "https://manfath.dev/blog/port-already-in-use-macos/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="/">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-name">Manfath</span>
+  </a>
+  <div class="nav-links">
+    <a href="/" class="hide-sm">Home</a>
+    <a href="/blog/" class="hide-sm">Blog</a>
+    <a href="/#download" class="hide-sm">Download</a>
+    <div class="lang" role="group" aria-label="Language">
+      <a id="lang-en" class="on" href="/blog/port-already-in-use-macos/" aria-current="page">EN</a>
+      <a id="lang-ar" class="ar-btn" href="/blog/ar/port-already-in-use-macos/">ع</a>
+    </div>
+  </div>
+</nav>
+
+<main class="blog-shell">
+  <div class="blog-crumbs">
+    <a href="/">Manfath</a>
+    <span class="sep">/</span>
+    <a href="/blog/">Blog</a>
+    <span class="sep">/</span>
+    <span>EADDRINUSE on macOS</span>
+  </div>
+
+  <article class="post">
+    <div class="post-meta">Troubleshooting · 2026-04-26 · 7 min read</div>
+    <h1>Fix "port already in use" (EADDRINUSE) on macOS</h1>
+    <p class="lede">Your dev server crashed, you restarted it, and now it greets you with <code>Error: listen EADDRINUSE: address already in use :::3000</code>. The good news: this is almost always cosmetic. Here's why it happens, the safe way to free the port, and worked examples for the stacks where it bites most.</p>
+
+    <h2>What EADDRINUSE actually means</h2>
+    <p><code>EADDRINUSE</code> is the POSIX error the kernel returns when a process calls <code>bind()</code> on a TCP/UDP address-port pair that's already claimed. It is <em>never</em> a bug in your app's logic — it's the OS refusing to double-book the port. Two scenarios produce it:</p>
+    <ol>
+      <li>Another process is genuinely listening on the port.</li>
+      <li>The previous instance of <em>your</em> process exited, but the kernel still considers the socket in use (typically <code>TIME_WAIT</code>).</li>
+    </ol>
+    <p>The fix is different in each case.</p>
+
+    <h2>Step 1: Find out who's holding the port</h2>
+    <p>The fastest answer is <code>lsof</code>:</p>
+    <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
+    <p>Three outcomes:</p>
+    <ul>
+      <li><strong>One row, your process name (<code>node</code>, <code>ruby</code>, <code>python</code>…).</strong> A previous run is still alive. Go to step 2.</li>
+      <li><strong>One row, an unfamiliar process.</strong> Something else is on the port. Either change ports or stop that process.</li>
+      <li><strong>No output.</strong> Nothing is listening — but you still got <code>EADDRINUSE</code>. That's <code>TIME_WAIT</code>. Go to step 3.</li>
+    </ul>
+    <p>(For a fuller walkthrough of <code>lsof</code>, see <a href="/blog/find-process-on-port-macos/">finding what process is using a port on macOS</a>.)</p>
+
+    <h2>Step 2: Free the port — gracefully</h2>
+    <p>If the offender is your own process, kill it with SIGTERM first:</p>
+    <pre><code>kill $(lsof -ti :3000)</code></pre>
+    <p>SIGTERM is the polite signal. The process catches it, closes its sockets, flushes any pending writes, removes its PID file, and exits. That's what you want.</p>
+    <p>If after a couple of seconds <code>lsof -ti :3000</code> still returns the same PID, escalate:</p>
+    <pre><code>kill -9 $(lsof -ti :3000)</code></pre>
+    <p>SIGKILL is unstoppable — the process never sees it. That's why it's a last resort: anything the process should have cleaned up (lock files, temp dirs, sockets in <code>CLOSE_WAIT</code>) gets left behind.</p>
+
+    <blockquote>
+      <strong>Don't <code>sudo kill -9</code> by reflex.</strong> If your shell can't kill the process, almost always the right move is to find out <em>why</em> — usually because it's running under a different user. Adding <code>sudo</code> makes the cleanup problem worse.
+    </blockquote>
+
+    <h2>Step 3: When nothing's listening but the port's still busy</h2>
+    <p>You see <code>EADDRINUSE</code>, but <code>lsof</code> shows nothing. This is <code>TIME_WAIT</code>: the TCP closing handshake leaves a socket lingering for 30–120 seconds so any delayed packets can be matched and dropped, not delivered to a new server on the same port.</p>
+    <p>You have three options:</p>
+    <ul>
+      <li><strong>Wait it out.</strong> Two minutes max, usually less.</li>
+      <li><strong>Tell your server to set <code>SO_REUSEADDR</code>.</strong> This lets the kernel reuse a <code>TIME_WAIT</code> socket. Most frameworks set it by default. If yours doesn't, add it to your bind call.</li>
+      <li><strong>Bind to a different port.</strong> Often the easiest path during development.</li>
+    </ul>
+    <p>You can confirm the state with <code>netstat</code>:</p>
+    <pre><code>netstat -anv -p tcp | grep 3000</code></pre>
+    <p>If you see lines ending in <code>TIME_WAIT</code>, that's your culprit.</p>
+
+    <div class="post-cta">
+      <div class="h">Free a port without typing.</div>
+      <div class="b">Manfath shows every listening port in your menu bar with one-click kill — SIGTERM first, SIGKILL only if it has to. Free, open-source, no telemetry.</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/#download">Download Manfath</a>
+        <a class="btn btn-ghost" href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+
+    <h2>Worked examples</h2>
+
+    <h3>Node / Express / Next.js / Vite</h3>
+    <pre><code>Error: listen EADDRINUSE: address already in use :::3000</code></pre>
+    <p>Cause: nodemon, <code>npm run dev</code>, or a tab in another terminal still holds the port. Fix:</p>
+    <pre><code>lsof -ti :3000 | xargs kill</code></pre>
+    <p>If you're on Next.js or Vite, you can also pass a different port: <code>PORT=3001 npm run dev</code> or <code>vite --port 5174</code>.</p>
+
+    <h3>Rails / Puma</h3>
+    <pre><code>A server is already running. Check /tmp/pids/server.pid</code></pre>
+    <p>Rails refuses to start if the PID file exists. Two fixes:</p>
+    <pre><code><span class="cmt"># 1. The actual process is dead, just stale PID file</span>
+rm tmp/pids/server.pid
+
+<span class="cmt"># 2. The actual process is alive, kill it first</span>
+kill $(cat tmp/pids/server.pid)
+rm tmp/pids/server.pid</code></pre>
+
+    <h3>Python / Flask / Django</h3>
+    <pre><code>OSError: [Errno 48] Address already in use</code></pre>
+    <p>Same pattern: <code>lsof -ti :8000 | xargs kill</code>. Django's runserver normally sets <code>SO_REUSEADDR</code>, so this is usually a real lingering process — not <code>TIME_WAIT</code>.</p>
+
+    <h3>Docker</h3>
+    <pre><code>Error: Bind for 0.0.0.0:5432 failed: port is already allocated</code></pre>
+    <p>Two flavors:</p>
+    <ul>
+      <li><strong>A previous container still has it.</strong> <code>docker ps</code>, then <code>docker stop &lt;name&gt;</code>.</li>
+      <li><strong>A host process has it.</strong> A native Postgres install often binds <code>5432</code>. <code>lsof -i :5432</code> will tell you. Either stop the host service (<code>brew services stop postgresql</code>) or remap the container's host port (<code>5433:5432</code> in docker-compose).</li>
+    </ul>
+
+    <h2>Prevention: leave fewer ghosts behind</h2>
+    <ul>
+      <li><strong>Use a process manager during dev</strong> (foreman, overmind, pm2). They reliably reap their children on Ctrl+C.</li>
+      <li><strong>Set <code>SO_REUSEADDR</code> in custom socket code.</strong> Express, Rails, Django, FastAPI all do this for you; hand-rolled servers often don't.</li>
+      <li><strong>Trap signals in production.</strong> A server that handles SIGTERM never leaves <code>TIME_WAIT</code> garbage — it does an orderly close.</li>
+      <li><strong>Keep an eye on the menu bar.</strong> A live view of listening ports makes "wait, didn't I kill that?" impossible.</li>
+    </ul>
+
+    <hr>
+
+    <div class="post-foot">
+      <div class="h">Read next</div>
+      <ul>
+        <li><a href="/blog/find-process-on-port-macos/">How to find what process is using a port on macOS</a></li>
+        <li><a href="/blog/localhost-tunneling-alternatives/">Free ngrok alternatives for localhost tunneling</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://github.com/Dnymte/manfath/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+  </div>
+</footer>
+
+</body>
+</html>

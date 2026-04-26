@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0a0c" />
+
+<title>كيف تعرف العملية التي تستخدم منفذاً ما على macOS — Manfath</title>
+<meta name="description" content="ثلاث طرق موثوقة لمعرفة العملية المستمعة على منفذ في macOS — lsof و netstat وواجهة بنقرة واحدة. مع أوامر جاهزة للنسخ والمطبّات الشائعة." />
+<meta name="keywords" content="macOS, إيجاد عملية على منفذ, lsof منفذ, ما الذي يستخدم المنفذ 3000, netstat ماك, منفذ إلى PID" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Manfath" />
+
+<link rel="canonical" href="https://manfath.dev/blog/ar/find-process-on-port-macos/" />
+<link rel="alternate" hreflang="en" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/find-process-on-port-macos/" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="كيف تعرف العملية التي تستخدم منفذاً ما على macOS" />
+<meta property="og:description" content="ثلاث طرق موثوقة لربط المنفذ بالعملية المستمعة عليه على macOS." />
+<meta property="og:url" content="https://manfath.dev/blog/ar/find-process-on-port-macos/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:locale" content="ar_SA" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta property="article:published_time" content="2026-04-26T00:00:00Z" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://manfath.dev/blog/ar/find-process-on-port-macos/#post",
+      "headline": "كيف تعرف العملية التي تستخدم منفذاً ما على macOS",
+      "description": "ثلاث طرق موثوقة لربط المنفذ بالعملية المستخدمة له على macOS — lsof و netstat وواجهة بنقرة واحدة.",
+      "url": "https://manfath.dev/blog/ar/find-process-on-port-macos/",
+      "datePublished": "2026-04-26",
+      "dateModified": "2026-04-26",
+      "inLanguage": "ar",
+      "image": "https://manfath.dev/assets/og.png",
+      "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
+      "publisher": {
+        "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/",
+        "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
+      },
+      "mainEntityOfPage": "https://manfath.dev/blog/ar/find-process-on-port-macos/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "المدوّنة", "item": "https://manfath.dev/blog/ar/" },
+        { "@type": "ListItem", "position": 3, "name": "إيجاد عملية على منفذ", "item": "https://manfath.dev/blog/ar/find-process-on-port-macos/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="/?lang=ar">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-ar" style="display:inline">منفذ</span>
+  </a>
+  <div class="nav-links">
+    <a href="/?lang=ar" class="hide-sm">الرئيسية</a>
+    <a href="/blog/ar/" class="hide-sm">المدوّنة</a>
+    <a href="/?lang=ar#download" class="hide-sm">تحميل</a>
+    <div class="lang" role="group" aria-label="اللغة">
+      <a id="lang-en" href="/blog/find-process-on-port-macos/">EN</a>
+      <a id="lang-ar" class="on ar-btn" href="/blog/ar/find-process-on-port-macos/" aria-current="page">ع</a>
+    </div>
+  </div>
+</nav>
+
+<main class="blog-shell">
+  <div class="blog-crumbs">
+    <a href="/?lang=ar">Manfath</a>
+    <span class="sep">/</span>
+    <a href="/blog/ar/">المدوّنة</a>
+    <span class="sep">/</span>
+    <span>إيجاد عملية على منفذ</span>
+  </div>
+
+  <article class="post">
+    <div class="post-meta">درس · 2026-04-26 · 6 دقائق قراءة</div>
+    <h1>كيف تعرف العملية التي تستخدم منفذاً ما على macOS</h1>
+    <p class="lede">شغّلت <code>npm run dev</code> فوجدت رسالة <em>«المنفذ 3000 قيد الاستخدام»</em>، وتحتاج معرفة من يمسك به. إليك ثلاث طرق موثوقة لربط المنفذ بالعملية على macOS — وأيّها تختار في كل موقف.</p>
+
+    <h2>الإجابة المختصرة</h2>
+    <p>افتح الطرفية وشغّل:</p>
+    <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
+    <p>استبدل <code>3000</code> بالمنفذ المطلوب. ستبدو المخرجات هكذا:</p>
+    <pre><code>COMMAND    PID    USER   FD   TYPE  DEVICE    NAME
+node     54231 khalouf  23u  IPv6 0x...  TCP *:3000 (LISTEN)</code></pre>
+    <p>عمود <code>PID</code> (هنا <code>54231</code>) هو إجابتك. تلك هي العملية التي تحتجز المنفذ 3000.</p>
+
+    <h2>الإجابة الأطول (وسببها)</h2>
+
+    <h3>1. <code>lsof</code> — الخيار الافتراضي الصحيح</h3>
+    <p>أداة <code>lsof</code> («اعرض الملفات المفتوحة») مثبّتة مسبقاً على macOS. ورغم اسمها، فهي تعرض <em>كل شيء</em> مفتوح — ملفات ومقابس وأنابيب واتصالات شبكية. والمقابس في يونكس ملفات أيضاً، لذا تظهر المنافذ المستمعة هنا.</p>
+    <p>الخيارات المهمة:</p>
+    <ul>
+      <li><code>-n</code> — لا تحوّل عناوين IP إلى أسماء (أسرع، بلا DNS).</li>
+      <li><code>-P</code> — لا تترجم أرقام المنافذ إلى أسماء خدمات (تريد <code>3000</code> لا <code>hbci</code>).</li>
+      <li><code>-iTCP:3000</code> — مطابقة TCP على المنفذ 3000. استخدم <code>-iUDP:53</code> لـUDP، أو <code>-i :3000</code> لكليهما.</li>
+      <li><code>-sTCP:LISTEN</code> — أَظهِر المقابس المستمعة فقط (تجاوز الاتصالات القائمة).</li>
+    </ul>
+    <p>للسكريبتات، <code>-t</code> يعطيك الـPID فقط:</p>
+    <pre><code>lsof -ti :3000     <span class="cmt"># PID مجرّد، صالح للتمرير</span></code></pre>
+    <p>هذه الصياغة تظهر في السطر الشهير <code>kill -9 $(lsof -ti :3000)</code>.</p>
+
+    <h3>2. <code>netstat</code> — حين لا يتوفّر <code>lsof</code></h3>
+    <p>أداة <code>netstat</code> على macOS بنكهة BSD وتفتقر للخيار <code>-p</code> الذي يعرفه مستخدمو لينكس. لإظهار المقابس المستمعة:</p>
+    <pre><code>netstat -anv -p tcp | grep LISTEN</code></pre>
+    <p>لن ترى أسماء العمليات هنا، لكنك سترى كل المنافذ المستمعة دفعةً واحدة — مفيد حين لا تعرف بعد <em>أيّ</em> منفذ هو المقصود.</p>
+    <p>للانتقال من منفذ إلى PID، عُد إلى <code>lsof</code>. لا توجد طريقة أصيلة جيّدة لفعل ذلك بـ<code>netstat</code> وحدها على macOS.</p>
+
+    <h3>3. <code>ss</code> — تنبيه: غير متوفّرة على macOS</h3>
+    <p>إن كنت قادماً من لينكس، قد تمتدّ يدك إلى <code>ss -ltnp</code>. لا تفعل. <code>ss</code> ليست مثبّتة افتراضياً على macOS ولا تستحقّ التثبيت — <code>lsof</code> تكفي. (يمكنك <code>brew install iproute2mac</code> إن أصرّت ذاكرة العضلات، لكنه مجرّد غلاف.)</p>
+
+    <h3>4. مسار «مراقب النشاط»</h3>
+    <p>«مراقب النشاط» (Cmd+Space → "Activity Monitor") يُظهر كل العمليات الجارية مع تبويب الشبكة. مفيد لتأكيد ما يمثّله PID معيّن، لكنه لا يدعم البحث <em>بالمنفذ</em>. تحتاج <code>lsof</code> أولاً للحصول على PID، ثم «مراقب النشاط» لفحصه.</p>
+
+    <h2>المطبّات الشائعة</h2>
+
+    <h3>مخرجات فارغة</h3>
+    <p>إذا لم تُرجِع <code>lsof -i :3000</code> شيئاً، ثلاثة أشياء للتحقّق:</p>
+    <ol>
+      <li><strong>هل الخادم يعمل فعلاً؟</strong> تحقّق بـ<code>ps aux | grep node</code> (أو أيّ بيئة تشغيل).</li>
+      <li><strong>هل يستمع على TCP لا UDP؟</strong> جرّب <code>lsof -i :3000</code> دون مُحدِّد <code>TCP</code>.</li>
+      <li><strong>هل بُدِئ بمستخدم آخر؟</strong> إن كان <code>sudo</code>، قد تحتاج <code>sudo lsof -i :3000</code> لرؤيته.</li>
+    </ol>
+
+    <h3>عدّة PIDs</h3>
+    <p>إن أعطتك <code>lsof</code> عدّة صفوف لمنفذ واحد، فأنت غالباً أمام أب وأطفال (مثل تجمّع Node، أو webpack-dev-server نسخ عمّالاً). أوّل PID هو ما تريده عادةً؛ الباقي يموت معه عند الإشارة.</p>
+
+    <h3>IPv6 مقابل IPv4</h3>
+    <p>macOS يفضّل IPv6. الخادم المرتبط بـ<code>::</code> يظهر بنوع TYPE <code>IPv6</code>. <code>lsof -iTCP:3000</code> يطابق كليهما، لذا نادراً ما تكون مشكلة — لكن إن كنت ترى المنفذ في المتصفّح ولا تراه في <code>lsof</code>، تأكّد أنك لا تُصفّي إحدى العائلتين.</p>
+
+    <div class="post-cta">
+      <div class="h">تخطَّ الكتابة.</div>
+      <div class="b">يجلس Manfath في شريط القوائم ويُظهر كل منفذ مستمع — TCP و UDP و IPv4 و IPv6 — مع اسم العملية والـPID خلف كلٍّ منها. يُحدَّث كل 3 ثوانٍ. مجاني ومفتوح المصدر.</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/?lang=ar#download">تحميل Manfath</a>
+        <a class="btn btn-ghost" href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener">عرض على GitHub</a>
+      </div>
+    </div>
+
+    <h2>بعد أن تحصل على الـPID</h2>
+    <p>الخطوة التالية تعتمد على الهدف:</p>
+    <ul>
+      <li><strong>تريد فقط تحرير المنفذ؟</strong> أرسِل SIGTERM أولاً: <code>kill &lt;PID&gt;</code>. إذا تجاهلك، صعّد: <code>kill -9 &lt;PID&gt;</code>. (لمَ ليس <code>-9</code> دائماً؟ راجع <a href="/blog/ar/port-already-in-use-macos/">منشورنا حول EADDRINUSE</a>.)</li>
+      <li><strong>تريد معرفة ما هو؟</strong> <code>ps -o pid,ppid,command -p &lt;PID&gt;</code> يُظهر سطر الأوامر الكامل والأب.</li>
+      <li><strong>تريد مشاركته للعموم؟</strong> راجع <a href="/blog/ar/localhost-tunneling-alternatives/">بدائل ngrok المجانية</a> لأنفاق منافذ localhost.</li>
+    </ul>
+
+    <h2>أوامر جدير بحفظها</h2>
+    <pre><code><span class="cmt"># من يحتجز المنفذ 3000؟</span>
+lsof -nP -iTCP:3000 -sTCP:LISTEN
+
+<span class="cmt"># PID مجرّد (للسكريبتات)</span>
+lsof -ti :3000
+
+<span class="cmt"># كل منافذ TCP المستمعة، مرتّبة</span>
+lsof -nP -iTCP -sTCP:LISTEN | tail -n +2 | sort
+
+<span class="cmt"># أَنهِ من يحتجز المنفذ 3000 (بهدوء، ثم بالقوة)</span>
+PID=$(lsof -ti :3000) && kill $PID; sleep 2; kill -9 $PID 2&gt;/dev/null</code></pre>
+
+    <hr>
+
+    <div class="post-foot">
+      <div class="h">اقرأ بعد ذلك</div>
+      <ul>
+        <li><a href="/blog/ar/port-already-in-use-macos/">حلّ خطأ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS</a></li>
+        <li><a href="/blog/ar/localhost-tunneling-alternatives/">بدائل مجانية لـ ngrok لأنفاق localhost</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://github.com/Dnymte/manfath/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+  </div>
+</footer>
+
+</body>
+</html>

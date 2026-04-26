@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://manfath.dev/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/" />
+  </url>
+
+  <url>
+    <loc>https://manfath.dev/blog/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/" />
+  </url>
+  <url>
+    <loc>https://manfath.dev/blog/ar/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/" />
+  </url>
+
+  <url>
+    <loc>https://manfath.dev/blog/find-process-on-port-macos/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/find-process-on-port-macos/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+  </url>
+  <url>
+    <loc>https://manfath.dev/blog/ar/find-process-on-port-macos/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/find-process-on-port-macos/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+  </url>
+
+  <url>
+    <loc>https://manfath.dev/blog/port-already-in-use-macos/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/port-already-in-use-macos/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+  </url>
+  <url>
+    <loc>https://manfath.dev/blog/ar/port-already-in-use-macos/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/port-already-in-use-macos/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+  </url>
+
+  <url>
+    <loc>https://manfath.dev/blog/localhost-tunneling-alternatives/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/localhost-tunneling-alternatives/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+  </url>
+  <url>
+    <loc>https://manfath.dev/blog/ar/localhost-tunneling-alternatives/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/localhost-tunneling-alternatives/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+  </url>
+
+</urlset>

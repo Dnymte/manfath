@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0a0c" />
+
+<title>حلّ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS — Manfath</title>
+<meta name="description" content="لماذا تَعلَق المنافذ على macOS، والطريقة الآمنة لتحريرها، وأمثلة عملية على Node و Vite و Rails و Docker. مع متى يُصلِح SO_REUSEADDR المشكلة تلقائياً." />
+<meta name="keywords" content="EADDRINUSE, المنفذ قيد الاستخدام ماك, address already in use, macOS منفذ عالق, Node EADDRINUSE, تحرير منفذ ماك" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Manfath" />
+
+<link rel="canonical" href="https://manfath.dev/blog/ar/port-already-in-use-macos/" />
+<link rel="alternate" hreflang="en" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/port-already-in-use-macos/" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/port-already-in-use-macos/" />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="حلّ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS" />
+<meta property="og:description" content="لماذا تَعلَق المنافذ، والطريقة الآمنة لتحريرها، وأمثلة عملية على Node و Vite و Rails و Docker." />
+<meta property="og:url" content="https://manfath.dev/blog/ar/port-already-in-use-macos/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:locale" content="ar_SA" />
+<meta property="og:locale:alternate" content="en_US" />
+<meta property="article:published_time" content="2026-04-26T00:00:00Z" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://manfath.dev/blog/ar/port-already-in-use-macos/#post",
+      "headline": "حلّ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS",
+      "description": "لماذا تَعلَق المنافذ على macOS، والطريقة الآمنة لتحريرها، وأمثلة عملية على Node و Vite و Rails و Docker.",
+      "url": "https://manfath.dev/blog/ar/port-already-in-use-macos/",
+      "datePublished": "2026-04-26",
+      "dateModified": "2026-04-26",
+      "inLanguage": "ar",
+      "image": "https://manfath.dev/assets/og.png",
+      "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
+      "publisher": {
+        "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/",
+        "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
+      },
+      "mainEntityOfPage": "https://manfath.dev/blog/ar/port-already-in-use-macos/"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "ماذا يعني EADDRINUSE؟",
+          "acceptedAnswer": { "@type": "Answer", "text": "EADDRINUSE هو رمز خطأ POSIX لـ«العنوان قيد الاستخدام». يُرجِعه النظام عندما تحاول عملية الارتباط ببورت TCP أو UDP يستمع عليه عملية أخرى أصلاً." }
+        },
+        {
+          "@type": "Question",
+          "name": "لماذا لا يزال المنفذ مستخدماً بعد إغلاق الطرفية؟",
+          "acceptedAnswer": { "@type": "Answer", "text": "إغلاق الطرفية لا يقتل دائماً العملية الفرعية. إن خرج الـshell الأب لكن الخادم انفصل، أو إن قام مُشغِّل (مثل nodemon أو npm أو foreman) بإنشاء طفل لا يزال يعمل، يبقى المُستمِع مرتبطاً. ابحث عنه بـ`lsof -ti :PORT` ثم أَنهِه." }
+        },
+        {
+          "@type": "Question",
+          "name": "هل أستخدم kill -9؟",
+          "acceptedAnswer": { "@type": "Answer", "text": "ليس كخطوة أولى. SIGTERM (`kill <pid>`) يسمح للعملية بفكّ الارتباط بهدوء وحفظ حالتها. SIGKILL (`kill -9`) لا يُقاوَم لكنه يتجاوز التنظيف، وقد يترك ملفات مؤقّتة وملفّات قفل ومقابس في TIME_WAIT. استخدمه فقط إن لم ينفع SIGTERM خلال ثوانٍ." }
+        },
+        {
+          "@type": "Question",
+          "name": "ما هو TIME_WAIT وهل يُسبّب EADDRINUSE؟",
+          "acceptedAnswer": { "@type": "Answer", "text": "TIME_WAIT هي حالة TCP التي يدخلها المقبس بعد الإغلاق، يبقى ~30–120 ثانية لمعالجة الحزم المتأخّرة. قد يمنع إعادة الارتباط على المنفذ نفسه ما لم يُفعِّل الخادم SO_REUSEADDR. معظم الأُطر الحديثة تفعّله نيابة عنك؛ إن كنت تكتب مقابس يدوياً، فعّله صراحة." }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "المدوّنة", "item": "https://manfath.dev/blog/ar/" },
+        { "@type": "ListItem", "position": 3, "name": "EADDRINUSE على macOS", "item": "https://manfath.dev/blog/ar/port-already-in-use-macos/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="/?lang=ar">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-ar" style="display:inline">منفذ</span>
+  </a>
+  <div class="nav-links">
+    <a href="/?lang=ar" class="hide-sm">الرئيسية</a>
+    <a href="/blog/ar/" class="hide-sm">المدوّنة</a>
+    <a href="/?lang=ar#download" class="hide-sm">تحميل</a>
+    <div class="lang" role="group" aria-label="اللغة">
+      <a id="lang-en" href="/blog/port-already-in-use-macos/">EN</a>
+      <a id="lang-ar" class="on ar-btn" href="/blog/ar/port-already-in-use-macos/" aria-current="page">ع</a>
+    </div>
+  </div>
+</nav>
+
+<main class="blog-shell">
+  <div class="blog-crumbs">
+    <a href="/?lang=ar">Manfath</a>
+    <span class="sep">/</span>
+    <a href="/blog/ar/">المدوّنة</a>
+    <span class="sep">/</span>
+    <span>EADDRINUSE على macOS</span>
+  </div>
+
+  <article class="post">
+    <div class="post-meta">استكشاف أخطاء · 2026-04-26 · 7 دقائق قراءة</div>
+    <h1>حلّ خطأ «المنفذ قيد الاستخدام» (EADDRINUSE) على macOS</h1>
+    <p class="lede">تعطّل خادم التطوير، فأعدت تشغيله، فاستقبلك بـ<code>Error: listen EADDRINUSE: address already in use :::3000</code>. الخبر السار: المشكلة شكلية تقريباً دائماً. هنا سبب حدوثها، والطريقة الآمنة لتحرير المنفذ، وأمثلة عملية على البيئات الأكثر معاناةً منها.</p>
+
+    <h2>ما يعنيه EADDRINUSE فعلاً</h2>
+    <p><code>EADDRINUSE</code> هو الخطأ الذي تُعيده النواة حين تستدعي عملية <code>bind()</code> على زوج عنوان+منفذ TCP/UDP محجوز سلفاً. <em>ليس</em> خطأً في منطق تطبيقك أبداً — بل النظام يرفض حجز المنفذ مرتين. سيناريوهان يُنتجان هذا الخطأ:</p>
+    <ol>
+      <li>عملية أخرى تستمع فعلاً على المنفذ.</li>
+      <li>النسخة السابقة من <em>عمليتك</em> خرجت، لكن النواة لا تزال تعتبر المقبس مستخدماً (عادةً <code>TIME_WAIT</code>).</li>
+    </ol>
+    <p>الحلّ مختلف في كل حالة.</p>
+
+    <h2>الخطوة 1: عرف من يحتجز المنفذ</h2>
+    <p>أسرع إجابة عبر <code>lsof</code>:</p>
+    <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
+    <p>ثلاث نتائج محتملة:</p>
+    <ul>
+      <li><strong>صف واحد، باسم عمليتك (<code>node</code> أو <code>ruby</code> أو <code>python</code>…).</strong> تشغيل سابق لا يزال حياً. اذهب للخطوة 2.</li>
+      <li><strong>صف واحد، عملية غريبة.</strong> شيء آخر يحتلّ المنفذ. إمّا غيّر المنفذ أو أوقِف تلك العملية.</li>
+      <li><strong>لا مخرجات.</strong> لا شيء يستمع — لكنك ما زلت تتلقّى <code>EADDRINUSE</code>. هذه هي <code>TIME_WAIT</code>. اذهب للخطوة 3.</li>
+    </ul>
+    <p>(للاطّلاع الأشمل على <code>lsof</code>، راجع <a href="/blog/ar/find-process-on-port-macos/">إيجاد العملية المستخدمة لمنفذ على macOS</a>.)</p>
+
+    <h2>الخطوة 2: تحرير المنفذ — بهدوء</h2>
+    <p>إن كان المتسبّب عمليتك أنت، أنهِها أوّلاً بـSIGTERM:</p>
+    <pre><code>kill $(lsof -ti :3000)</code></pre>
+    <p>SIGTERM هي الإشارة المهذّبة. تلتقطها العملية، تُغلق مقابسها، تُفرغ أيّ كتابات معلّقة، تحذف ملف الـPID، ثم تخرج. هذا ما تريد.</p>
+    <p>إن أعادت <code>lsof -ti :3000</code> الـPID نفسه بعد ثوانٍ، صعِّد:</p>
+    <pre><code>kill -9 $(lsof -ti :3000)</code></pre>
+    <p>SIGKILL لا تُقاوَم — العملية لا تراها أصلاً. لذلك هي الملاذ الأخير: أيّ شيء كان يُفترض أن تنظّفه (ملفات قفل، مجلّدات مؤقّتة، مقابس في <code>CLOSE_WAIT</code>) سيبقى متروكاً.</p>
+
+    <blockquote>
+      <strong>لا تَلجأ تلقائياً إلى <code>sudo kill -9</code>.</strong> إن لم يستطع shell-ك إنهاء العملية، فالخطوة الصحيحة معرفة <em>السبب</em> — غالباً لأنها تعمل بمستخدم آخر. إضافة <code>sudo</code> تُفاقم مشكلة التنظيف.
+    </blockquote>
+
+    <h2>الخطوة 3: لا شيء يستمع لكن المنفذ مشغول</h2>
+    <p>تظهر <code>EADDRINUSE</code>، لكن <code>lsof</code> لا يُظهر شيئاً. هذه <code>TIME_WAIT</code>: مصافحة إغلاق TCP تُبقي المقبس متلكّئاً 30–120 ثانية لتُطابق الحزم المتأخّرة وتُسقطها بدلاً من تسليمها لخادم جديد على المنفذ نفسه.</p>
+    <p>أمامك ثلاثة خيارات:</p>
+    <ul>
+      <li><strong>انتظر قليلاً.</strong> دقيقتان كحدّ أقصى، أقل غالباً.</li>
+      <li><strong>اطلب من خادمك تفعيل <code>SO_REUSEADDR</code>.</strong> يسمح ذلك للنواة بإعادة استخدام مقبس <code>TIME_WAIT</code>. معظم الأُطر تفعّله افتراضياً. إن لم يفعل، أَضِفه إلى استدعاء الـbind.</li>
+      <li><strong>اربط بمنفذ آخر.</strong> غالباً أسهل مسار في التطوير.</li>
+    </ul>
+    <p>يمكنك التأكّد من الحالة بـ<code>netstat</code>:</p>
+    <pre><code>netstat -anv -p tcp | grep 3000</code></pre>
+    <p>أسطر تنتهي بـ<code>TIME_WAIT</code> هي السبب.</p>
+
+    <div class="post-cta">
+      <div class="h">حرّر منفذاً دون كتابة.</div>
+      <div class="b">يُظهِر Manfath كل منفذ مستمع في شريط القوائم مع إنهاء بنقرة واحدة — SIGTERM أوّلاً، SIGKILL فقط عند الضرورة. مجاني ومفتوح المصدر، بلا تتبّع.</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/?lang=ar#download">تحميل Manfath</a>
+        <a class="btn btn-ghost" href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+
+    <h2>أمثلة عملية</h2>
+
+    <h3>Node / Express / Next.js / Vite</h3>
+    <pre><code>Error: listen EADDRINUSE: address already in use :::3000</code></pre>
+    <p>السبب: nodemon أو <code>npm run dev</code> أو تبويب آخر في طرفية أخرى لا يزال يحتجز المنفذ. الحلّ:</p>
+    <pre><code>lsof -ti :3000 | xargs kill</code></pre>
+    <p>في Next.js أو Vite، يمكنك أيضاً تمرير منفذ مختلف: <code>PORT=3001 npm run dev</code> أو <code>vite --port 5174</code>.</p>
+
+    <h3>Rails / Puma</h3>
+    <pre><code>A server is already running. Check /tmp/pids/server.pid</code></pre>
+    <p>يرفض Rails التشغيل إن كان ملف الـPID موجوداً. حلّان:</p>
+    <pre><code><span class="cmt"># 1. العملية ميتة، فقط ملف PID قديم</span>
+rm tmp/pids/server.pid
+
+<span class="cmt"># 2. العملية حيّة، أنهِها أوّلاً</span>
+kill $(cat tmp/pids/server.pid)
+rm tmp/pids/server.pid</code></pre>
+
+    <h3>Python / Flask / Django</h3>
+    <pre><code>OSError: [Errno 48] Address already in use</code></pre>
+    <p>النمط نفسه: <code>lsof -ti :8000 | xargs kill</code>. خادم Django التطويري يفعّل <code>SO_REUSEADDR</code> عادةً، لذا هذه عملية متلكّئة حقيقية في الغالب — لا <code>TIME_WAIT</code>.</p>
+
+    <h3>Docker</h3>
+    <pre><code>Error: Bind for 0.0.0.0:5432 failed: port is already allocated</code></pre>
+    <p>نَكهتان:</p>
+    <ul>
+      <li><strong>حاوية سابقة لا تزال تحتجزه.</strong> <code>docker ps</code>، ثم <code>docker stop &lt;name&gt;</code>.</li>
+      <li><strong>عملية على المضيف تحتجزه.</strong> تثبيت Postgres الأصلي يربط <code>5432</code> غالباً. <code>lsof -i :5432</code> سيخبرك. إمّا أوقف خدمة المضيف (<code>brew services stop postgresql</code>) أو أعِد ربط منفذ المضيف للحاوية (<code>5433:5432</code> في docker-compose).</li>
+    </ul>
+
+    <h2>الوقاية: ترك أشباح أقل</h2>
+    <ul>
+      <li><strong>استخدم مدير عمليات في التطوير</strong> (foreman أو overmind أو pm2). يوقفون أبناءهم بثبات عند Ctrl+C.</li>
+      <li><strong>فعّل <code>SO_REUSEADDR</code> في كود المقابس المخصّص.</strong> Express و Rails و Django و FastAPI يفعلون ذلك نيابة عنك؛ الخوادم اليدويّة لا تفعل غالباً.</li>
+      <li><strong>التقط الإشارات في الإنتاج.</strong> الخادم الذي يُعالج SIGTERM لا يترك مخلّفات <code>TIME_WAIT</code> — يُغلق بنظام.</li>
+      <li><strong>راقب شريط القوائم.</strong> العرض الحيّ للمنافذ المستمعة يُلغي تساؤل «أَلَم أكن قد أنهيتُها؟».</li>
+    </ul>
+
+    <hr>
+
+    <div class="post-foot">
+      <div class="h">اقرأ بعد ذلك</div>
+      <ul>
+        <li><a href="/blog/ar/find-process-on-port-macos/">كيف تعرف العملية التي تستخدم منفذاً ما على macOS</a></li>
+        <li><a href="/blog/ar/localhost-tunneling-alternatives/">بدائل مجانية لـ ngrok لأنفاق localhost</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://github.com/Dnymte/manfath/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0a0c" />
+
+<title>How to find what process is using a port on macOS — Manfath</title>
+<meta name="description" content="Three reliable ways to find which process is listening on a port on macOS — lsof, netstat, and a one-click GUI. With copy-paste commands and gotchas." />
+<meta name="keywords" content="macOS, find process on port, lsof port, what is using port 3000, netstat mac, port to PID, listening ports macOS" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Manfath" />
+
+<link rel="canonical" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+<link rel="alternate" hreflang="en" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/find-process-on-port-macos/" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/find-process-on-port-macos/" />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="How to find what process is using a port on macOS" />
+<meta property="og:description" content="Three reliable ways to map a port back to the process behind it on macOS — with copy-paste commands and gotchas." />
+<meta property="og:url" content="https://manfath.dev/blog/find-process-on-port-macos/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="ar_SA" />
+<meta property="article:published_time" content="2026-04-26T00:00:00Z" />
+<meta property="article:modified_time" content="2026-04-26T00:00:00Z" />
+<meta property="article:author" content="Manfath" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://manfath.dev/blog/find-process-on-port-macos/#post",
+      "headline": "How to find what process is using a port on macOS",
+      "description": "Three reliable ways to map a port back to the process behind it on macOS — lsof, netstat, and a one-click GUI.",
+      "url": "https://manfath.dev/blog/find-process-on-port-macos/",
+      "datePublished": "2026-04-26",
+      "dateModified": "2026-04-26",
+      "inLanguage": "en",
+      "image": "https://manfath.dev/assets/og.png",
+      "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Manfath",
+        "url": "https://manfath.dev/",
+        "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
+      },
+      "mainEntityOfPage": "https://manfath.dev/blog/find-process-on-port-macos/",
+      "keywords": "macOS, lsof, ports, process, PID, netstat, listening ports"
+    },
+    {
+      "@type": "HowTo",
+      "name": "Find the process using a port on macOS",
+      "totalTime": "PT1M",
+      "tool": [
+        { "@type": "HowToTool", "name": "Terminal" },
+        { "@type": "HowToTool", "name": "lsof (preinstalled on macOS)" }
+      ],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Open Terminal",
+          "text": "Open Terminal.app (Applications → Utilities) or any terminal you prefer."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Run lsof for the port",
+          "text": "Run: lsof -nP -iTCP:3000 -sTCP:LISTEN — replace 3000 with the port you care about."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Read the PID column",
+          "text": "The second column (PID) is the process ID. The COMMAND column is the executable name."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "(Optional) Identify the parent process",
+          "text": "Run: ps -o pid,ppid,command -p <PID> to see the parent and full command line."
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://manfath.dev/blog/" },
+        { "@type": "ListItem", "position": 3, "name": "Find process on port (macOS)", "item": "https://manfath.dev/blog/find-process-on-port-macos/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="/">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-name">Manfath</span>
+  </a>
+  <div class="nav-links">
+    <a href="/" class="hide-sm">Home</a>
+    <a href="/blog/" class="hide-sm">Blog</a>
+    <a href="/#download" class="hide-sm">Download</a>
+    <div class="lang" role="group" aria-label="Language">
+      <a id="lang-en" class="on" href="/blog/find-process-on-port-macos/" aria-current="page">EN</a>
+      <a id="lang-ar" class="ar-btn" href="/blog/ar/find-process-on-port-macos/">ع</a>
+    </div>
+  </div>
+</nav>
+
+<main class="blog-shell">
+  <div class="blog-crumbs">
+    <a href="/">Manfath</a>
+    <span class="sep">/</span>
+    <a href="/blog/">Blog</a>
+    <span class="sep">/</span>
+    <span>Find process on port</span>
+  </div>
+
+  <article class="post">
+    <div class="post-meta">Tutorial · 2026-04-26 · 6 min read</div>
+    <h1>How to find what process is using a port on macOS</h1>
+    <p class="lede">You hit <code>npm run dev</code>, see <em>"port 3000 already in use"</em>, and now you need to know who's holding it. Here are the three reliable ways to map a port back to a process on macOS — and which one to reach for in which situation.</p>
+
+    <h2>The short answer</h2>
+    <p>Open Terminal and run:</p>
+    <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
+    <p>Replace <code>3000</code> with the port you care about. The output looks like this:</p>
+    <pre><code>COMMAND    PID    USER   FD   TYPE  DEVICE    NAME
+node     54231 khalouf  23u  IPv6 0x...  TCP *:3000 (LISTEN)</code></pre>
+    <p>The <code>PID</code> column (<code>54231</code> here) is your answer. That's the process holding port 3000.</p>
+
+    <h2>The longer answer (and why)</h2>
+
+    <h3>1. <code>lsof</code> — the right default</h3>
+    <p><code>lsof</code> ("list open files") ships with macOS. Despite the name, it lists open <em>everything</em> — files, sockets, pipes, network connections. Sockets are files in Unix, so listening ports show up here.</p>
+    <p>The flags worth knowing:</p>
+    <ul>
+      <li><code>-n</code> — don't resolve IPs to hostnames (faster, no DNS).</li>
+      <li><code>-P</code> — don't translate port numbers to service names (you want <code>3000</code>, not <code>hbci</code>).</li>
+      <li><code>-iTCP:3000</code> — match TCP traffic on port 3000. Use <code>-iUDP:53</code> for UDP, or <code>-i :3000</code> for both.</li>
+      <li><code>-sTCP:LISTEN</code> — only show listening sockets (skip established connections).</li>
+    </ul>
+    <p>If you're scripting, <code>-t</code> gives you just the PID:</p>
+    <pre><code>lsof -ti :3000     <span class="cmt"># bare PID, suitable for piping</span></code></pre>
+    <p>That's the form you'll see in the famous one-liner <code>kill -9 $(lsof -ti :3000)</code>.</p>
+
+    <h3>2. <code>netstat</code> — when <code>lsof</code> is unavailable</h3>
+    <p><code>netstat</code> on macOS is BSD-flavored and doesn't have the <code>-p</code> flag that Linux users expect. You can list listening sockets with:</p>
+    <pre><code>netstat -anv -p tcp | grep LISTEN</code></pre>
+    <p>You won't see process names here, but you'll see every listening port at once — useful when you don't yet know <em>which</em> port is in question.</p>
+    <p>To go from a port back to a PID, fall back to <code>lsof</code>. There's no good native way to do it with <code>netstat</code> alone on macOS.</p>
+
+    <h3>3. <code>ss</code> — note: not on macOS</h3>
+    <p>If you're coming from Linux, you might be reaching for <code>ss -ltnp</code>. Don't. <code>ss</code> isn't installed on macOS by default and isn't worth installing — <code>lsof</code> already does the job. (You can <code>brew install iproute2mac</code> if muscle memory demands it, but it's a wrapper.)</p>
+
+    <h3>4. The Activity Monitor route</h3>
+    <p>Activity Monitor (Cmd+Space → "Activity Monitor") lets you see all running processes with a Network tab. It's good for confirming what a PID corresponds to, but it doesn't let you query <em>by port</em>. You still need <code>lsof</code> first to find the PID, then Activity Monitor to inspect it.</p>
+
+    <h2>Common gotchas</h2>
+
+    <h3>Empty output</h3>
+    <p>If <code>lsof -i :3000</code> returns nothing, three things to check:</p>
+    <ol>
+      <li><strong>Is the server actually running?</strong> Check with <code>ps aux | grep node</code> (or whatever runtime you're using).</li>
+      <li><strong>Is it listening on TCP, not UDP?</strong> Try <code>lsof -i :3000</code> without the <code>TCP</code> qualifier.</li>
+      <li><strong>Was it started under another user?</strong> If <code>sudo</code>, you may need <code>sudo lsof -i :3000</code> to see it.</li>
+    </ol>
+
+    <h3>Multiple PIDs</h3>
+    <p>If <code>lsof</code> returns several rows for one port, you're usually looking at a parent + child (e.g. a Node cluster, or a webpack-dev-server that forked workers). The first PID is typically the one you want; the rest die with it on signal.</p>
+
+    <h3>IPv6 vs IPv4</h3>
+    <p>macOS prefers IPv6. A server bound to <code>::</code> shows up under TYPE <code>IPv6</code>. <code>lsof -iTCP:3000</code> matches both, so this is rarely a problem — but if you're seeing the port in a browser and not in <code>lsof</code>, double-check you're not filtering one family out.</p>
+
+    <div class="post-cta">
+      <div class="h">Skip the typing.</div>
+      <div class="b">Manfath sits in your menu bar and shows every listening port — TCP, UDP, IPv4, IPv6 — with the process name and PID behind each one. Refreshed every 3 seconds. Free and open source.</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/#download">Download Manfath</a>
+        <a class="btn btn-ghost" href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener">View on GitHub</a>
+      </div>
+    </div>
+
+    <h2>Once you have the PID</h2>
+    <p>What you do next depends on intent:</p>
+    <ul>
+      <li><strong>Just want to free the port?</strong> Send SIGTERM first: <code>kill &lt;PID&gt;</code>. If it ignores you, escalate: <code>kill -9 &lt;PID&gt;</code>. (Why not always <code>-9</code>? See <a href="/blog/port-already-in-use-macos/">our post on EADDRINUSE</a>.)</li>
+      <li><strong>Want to know what it is?</strong> <code>ps -o pid,ppid,command -p &lt;PID&gt;</code> shows the full command line and parent.</li>
+      <li><strong>Want to share it publicly?</strong> See <a href="/blog/localhost-tunneling-alternatives/">free ngrok alternatives</a> for tunneling localhost ports.</li>
+    </ul>
+
+    <h2>One-liners worth saving</h2>
+    <pre><code><span class="cmt"># Who has port 3000?</span>
+lsof -nP -iTCP:3000 -sTCP:LISTEN
+
+<span class="cmt"># Bare PID (for scripting)</span>
+lsof -ti :3000
+
+<span class="cmt"># All listening TCP ports on the machine, sorted</span>
+lsof -nP -iTCP -sTCP:LISTEN | tail -n +2 | sort
+
+<span class="cmt"># Kill whoever has port 3000 (gracefully, then forcefully)</span>
+PID=$(lsof -ti :3000) && kill $PID; sleep 2; kill -9 $PID 2&gt;/dev/null</code></pre>
+
+    <hr>
+
+    <div class="post-foot">
+      <div class="h">Read next</div>
+      <ul>
+        <li><a href="/blog/port-already-in-use-macos/">Fix "port already in use" (EADDRINUSE) on macOS</a></li>
+        <li><a href="/blog/localhost-tunneling-alternatives/">Free ngrok alternatives for localhost tunneling</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://github.com/Dnymte/manfath/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+/* ══════════════════════════════════════════════════════════════
+   BLOG — extends styles.css. Layout for the blog index and for
+   individual posts. Static pages: no JS required to render.
+══════════════════════════════════════════════════════════════ */
+
+.blog-shell{
+  max-width:880px;
+  margin:0 auto;
+  padding:120px 32px 80px;
+}
+@media (max-width:640px){
+  .blog-shell{padding:96px 20px 64px}
+}
+
+.blog-crumbs{
+  font-size:13px;
+  color:var(--ink-faint);
+  margin-bottom:24px;
+  letter-spacing:.02em;
+}
+.blog-crumbs a{color:var(--ink-dim);transition:color .15s}
+.blog-crumbs a:hover{color:var(--ink)}
+.blog-crumbs .sep{margin:0 8px;color:var(--ink-faint)}
+
+/* ─── index ─── */
+.blog-hero{margin-bottom:56px}
+.blog-hero h1{
+  font-size:48px;line-height:1.05;letter-spacing:-.02em;
+  margin:0 0 16px;font-weight:700;
+}
+.blog-hero p{
+  font-size:18px;line-height:1.55;color:var(--ink-dim);
+  max-width:640px;margin:0;
+}
+@media (max-width:640px){
+  .blog-hero h1{font-size:36px}
+  .blog-hero p{font-size:16px}
+}
+
+.blog-list{
+  display:flex;flex-direction:column;gap:0;
+  border-top:1px solid var(--line);
+}
+.blog-card{
+  display:block;
+  padding:32px 0;
+  border-bottom:1px solid var(--line);
+  transition:transform .2s;
+}
+.blog-card:hover{transform:translateX(4px)}
+html[dir="rtl"] .blog-card:hover{transform:translateX(-4px)}
+.blog-card .meta{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:10px;
+}
+.blog-card .meta .dot{margin:0 8px;opacity:.5}
+.blog-card h2{
+  font-size:24px;line-height:1.25;letter-spacing:-.01em;
+  margin:0 0 8px;font-weight:600;
+  color:var(--ink);
+}
+.blog-card:hover h2{color:var(--amber)}
+.blog-card p{
+  font-size:15.5px;line-height:1.6;
+  color:var(--ink-dim);
+  margin:0;max-width:680px;
+}
+@media (max-width:640px){
+  .blog-card{padding:24px 0}
+  .blog-card h2{font-size:20px}
+  .blog-card p{font-size:14.5px}
+}
+
+/* ─── post ─── */
+.post-meta{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--ink-faint);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:14px;
+}
+article.post h1{
+  font-size:44px;line-height:1.08;letter-spacing:-.02em;
+  margin:0 0 18px;font-weight:700;
+}
+article.post .lede{
+  font-size:19px;line-height:1.55;
+  color:var(--ink-dim);
+  margin:0 0 40px;
+  max-width:720px;
+}
+@media (max-width:640px){
+  article.post h1{font-size:32px}
+  article.post .lede{font-size:17px;margin-bottom:32px}
+}
+
+article.post{
+  font-size:16.5px;line-height:1.72;
+  color:var(--ink);
+}
+article.post p{margin:0 0 22px}
+article.post h2{
+  font-size:26px;line-height:1.2;letter-spacing:-.015em;
+  font-weight:600;
+  margin:56px 0 18px;
+}
+article.post h3{
+  font-size:19px;line-height:1.3;
+  font-weight:600;
+  margin:36px 0 12px;
+}
+article.post a{
+  color:var(--amber);
+  border-bottom:1px solid rgba(184,255,92,.3);
+  transition:border-color .15s;
+}
+article.post a:hover{border-bottom-color:var(--amber)}
+article.post strong{color:var(--ink);font-weight:600}
+article.post em{color:var(--ink)}
+
+article.post code{
+  font-family:var(--mono);
+  background:rgba(232,228,218,.06);
+  border:1px solid var(--line);
+  padding:2px 6px;border-radius:5px;
+  font-size:14px;
+  color:var(--ink);
+}
+
+article.post pre{
+  background:var(--bg-1);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:18px 20px;
+  overflow-x:auto;
+  font-family:var(--mono);
+  font-size:13.5px;
+  line-height:1.6;
+  margin:24px 0;
+  color:var(--ink);
+}
+article.post pre code{
+  background:none;border:0;padding:0;border-radius:0;
+  font-size:inherit;
+}
+article.post pre .cmt{color:var(--ink-faint)}
+article.post pre .k{color:var(--amber)}
+
+article.post ul, article.post ol{
+  margin:0 0 22px;
+  padding-inline-start:24px;
+}
+article.post li{margin:8px 0}
+article.post li::marker{color:var(--ink-faint)}
+
+article.post blockquote{
+  margin:28px 0;
+  padding:4px 0 4px 20px;
+  border-inline-start:2px solid var(--amber);
+  color:var(--ink-dim);
+  font-style:normal;
+}
+html[dir="rtl"] article.post blockquote{padding-left:0;padding-right:20px}
+
+article.post hr{
+  border:0;border-top:1px solid var(--line);
+  margin:48px 0;
+}
+
+article.post table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14.5px;
+  margin:24px 0;
+}
+article.post th, article.post td{
+  text-align:start;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+article.post th{
+  font-family:var(--mono);
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--ink-faint);
+  font-weight:500;
+  border-bottom:1px solid var(--line-strong);
+}
+article.post td code{font-size:13px}
+
+/* CTA card slotted into posts */
+.post-cta{
+  margin:48px 0;
+  padding:24px 28px;
+  border:1px solid var(--line-strong);
+  border-radius:12px;
+  background:linear-gradient(180deg, rgba(184,255,92,.04), rgba(184,255,92,0));
+}
+.post-cta .h{
+  font-weight:600;font-size:17px;
+  color:var(--ink);
+  margin-bottom:6px;
+  letter-spacing:-.005em;
+}
+.post-cta .b{
+  color:var(--ink-dim);font-size:14.5px;line-height:1.55;
+  margin-bottom:14px;
+}
+.post-cta .actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Reset the prose-link styling inside the CTA — buttons should look
+   like buttons, not underlined inline links inheriting amber text. */
+article.post .post-cta a.btn,
+article.post .post-cta a.btn:hover{
+  border-bottom:0;
+}
+article.post .post-cta a.btn-primary{
+  color:#0a0a0c;  /* dark text on the amber background */
+}
+article.post .post-cta a.btn-ghost{
+  color:var(--ink);
+}
+
+/* footer of post: next reads */
+.post-foot{
+  margin-top:64px;
+  padding-top:32px;
+  border-top:1px solid var(--line);
+}
+.post-foot .h{
+  font-family:var(--mono);
+  font-size:11.5px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--ink-faint);
+  margin-bottom:18px;
+}
+.post-foot ul{list-style:none;padding:0;margin:0}
+.post-foot li{margin:10px 0}
+.post-foot a{
+  color:var(--ink);
+  border-bottom:0;
+  font-weight:500;
+}
+.post-foot a:hover{color:var(--amber)}

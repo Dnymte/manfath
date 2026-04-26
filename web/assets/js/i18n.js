@@ -6,7 +6,7 @@
 const I18N = {
   en:{
     "brand":"Manfath",
-    "nav.features":"Features","nav.oss":"Open source","nav.download":"Download",
+    "nav.features":"Features","nav.oss":"Open source","nav.blog":"Blog","nav.download":"Download",
     "hero.eyebrow":"v1.0 · Free forever",
     "hero.title.line1":"See every port.",
     "hero.title.line2":"Kill what you don't need.",
@@ -47,6 +47,24 @@ const I18N = {
     "privacy.3":"unless",
     "privacy.4":"you",
     "privacy.5":"tunnel it.",
+    "faq.eyebrow":"Common questions",
+    "faq.title":"Things developers ask before they install.",
+    "faq.q1":"What is Manfath, exactly?",
+    "faq.a1":"Manfath is a free, open-source macOS menu bar app. It lists every listening localhost port on your machine, shows the process and PID behind each one, lets you kill any process with one click, and exposes any local port to the public internet via Cloudflare or ngrok. It runs entirely on your machine — no accounts, no telemetry.",
+    "faq.q2":"How do I find what's running on port 3000 on macOS?",
+    "faq.a2":"From the terminal: <code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code>. The PID column tells you which process owns the port. With Manfath, the same answer is in your menu bar — every port, refreshed every 3 seconds, sorted by activity.",
+    "faq.q3":"How do I kill a process on a port?",
+    "faq.a3":"CLI: <code>kill -9 $(lsof -ti :3000)</code>. Manfath does the same with one click — SIGTERM first (so the process can clean up), escalating to SIGKILL only if it refuses to exit.",
+    "faq.q4":"Is it really free?",
+    "faq.a4":"Yes. MIT-licensed, no paid tier, no upsell, no telemetry. The full source is on GitHub.",
+    "faq.q5":"What's a free alternative to ngrok?",
+    "faq.a5":"Cloudflare Tunnel (<code>cloudflared</code>) is free and unlimited. Manfath ships with Cloudflare and ngrok built-in — pick a port, click Tunnel, the public URL lands in your clipboard.",
+    "faq.q6":"Does it work with Docker, Vite, Next.js, Rails…?",
+    "faq.a6":"Yes — Manfath sees processes, not frameworks. Anything that opens a listening socket on macOS shows up: Vite, Next.js, Rails, Django, Express, FastAPI, Postgres, Redis, Docker-mapped host ports, and so on.",
+    "faq.q7":"Why not just use lsof?",
+    "faq.a7":"Use it when you already know the port and you're already in a terminal. Manfath is the always-visible, sortable, filterable, killable, tunnel-able view of <em>everything</em> that's listening — for the case where you don't yet know what's running.",
+    "faq.more":"Longer reads on",
+    "faq.more.link":"the Manfath blog",
     "dl.eyebrow":"Ready in 30 seconds",
     "dl.title":"Download Manfath",
     "dl.sub":"Universal binary — Apple Silicon and Intel. macOS 14 Sonoma or later.",
@@ -61,7 +79,7 @@ const I18N = {
   },
   ar:{
     "brand":"منفذ",
-    "nav.features":"الميزات","nav.oss":"مفتوح المصدر","nav.download":"تحميل",
+    "nav.features":"الميزات","nav.oss":"مفتوح المصدر","nav.blog":"المدونة","nav.download":"تحميل",
     "hero.eyebrow":"الإصدار 1.0 · مجاني للأبد",
     "hero.title.line1":"شاهد كل منفذ.",
     "hero.title.line2":"أوقف ما لا تحتاجه.",
@@ -102,6 +120,24 @@ const I18N = {
     "privacy.3":"إلا",
     "privacy.4":"إذا",
     "privacy.5":"شاركته.",
+    "faq.eyebrow":"الأسئلة الشائعة",
+    "faq.title":"ما يسأله المطوّرون قبل التثبيت.",
+    "faq.q1":"ما هو Manfath بالضبط؟",
+    "faq.a1":"تطبيق مجاني ومفتوح المصدر لشريط القوائم في macOS. يُظهر كل منفذ localhost مستمع على جهازك مع اسم العملية والـPID خلف كلٍّ منها، يتيح إنهاء أي عملية بنقرة، ويكشف أي منفذ محلي إلى الإنترنت العام عبر Cloudflare أو ngrok. يعمل بالكامل على جهازك — بلا حسابات، بلا تتبّع.",
+    "faq.q2":"كيف أعرف ما يعمل على المنفذ 3000 في macOS؟",
+    "faq.a2":"من الطرفية: <code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code>. عمود الـPID يخبرك بالعملية المالكة للمنفذ. مع Manfath، تجد الإجابة نفسها في شريط القوائم — كل المنافذ، تُحدَّث كل 3 ثوانٍ، مرتّبة بالنشاط.",
+    "faq.q3":"كيف أنهي عملية تستخدم منفذاً ما؟",
+    "faq.a3":"عبر الطرفية: <code>kill -9 $(lsof -ti :3000)</code>. Manfath يفعل نفس الشيء بنقرة واحدة — SIGTERM أولاً (لتفسح للعملية مجال التنظيف)، ثم SIGKILL فقط إن رفضت الإنهاء.",
+    "faq.q4":"هل هو فعلاً مجاني؟",
+    "faq.a4":"نعم. ترخيص MIT، بلا خطة مدفوعة، بلا ترقيات، بلا تتبّع. الكود الكامل على GitHub.",
+    "faq.q5":"ما البديل المجاني لـ ngrok؟",
+    "faq.a5":"Cloudflare Tunnel (<code>cloudflared</code>) مجاني وبلا حدود. Manfath يأتي بـ Cloudflare و ngrok مدمجَين — اختر منفذاً، انقر «نفق»، يُنسخ الرابط العام إلى حافظتك مباشرة.",
+    "faq.q6":"هل يعمل مع Docker و Vite و Next.js و Rails…؟",
+    "faq.a6":"نعم — Manfath يرى العمليات لا الأُطر. أي شيء يفتح مقبس استماع على macOS يظهر: Vite و Next.js و Rails و Django و Express و FastAPI و Postgres و Redis ومنافذ Docker المضيفة وغيرها.",
+    "faq.q7":"لمَ لا أكتفي بـ lsof؟",
+    "faq.a7":"استخدمه عندما تعرف المنفذ مسبقاً وأنت أصلاً في الطرفية. Manfath هو العرض الدائم القابل للترتيب والتصفية والإنهاء والتنفيق لِـ<em>كل</em> ما يستمع — للحالة التي لا تعرف فيها بعد ما يعمل.",
+    "faq.more":"قراءات أطول على",
+    "faq.more.link":"مدوّنة Manfath",
     "dl.eyebrow":"جاهز خلال 30 ثانية",
     "dl.title":"تحميل Manfath",
     "dl.sub":"ثنائي عالمي — Apple Silicon و Intel. macOS 14 Sonoma أو أحدث.",
@@ -124,7 +160,14 @@ function applyLang(lang){
   html.dir  = isAR ? 'rtl' : 'ltr';
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key = el.getAttribute('data-i18n');
-    if(I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
+    // Use innerHTML so we can ship inline <code>/<em> snippets in
+    // strings (e.g. FAQ answers). All strings come from this dictionary
+    // — never user input — so there's no XSS surface.
+    if(I18N[lang][key] !== undefined) el.innerHTML = I18N[lang][key];
+  });
+  // Point the Blog nav link to the right language mirror.
+  document.querySelectorAll('a[data-blog-link]').forEach(a => {
+    a.setAttribute('href', isAR ? '/blog/ar/' : '/blog/');
   });
   // Swap localized SEO so crawlers and shares see the right strings.
   const title = I18N[lang]['meta.title'];

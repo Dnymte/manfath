@@ -84,11 +84,17 @@
     font-size:12px;
     font-family:var(--mono);
   }
-  .lang button{
+  /* Match buttons (home page lang toggle) and anchors (blog pages
+     where the toggle navigates between language mirrors). */
+  .lang button, .lang a{
+    display:inline-block;
     padding:5px 10px;border-radius:999px;color:var(--ink-dim);
     min-width:32px;text-align:center;line-height:1;
+    text-decoration:none;
+    transition:color .15s, background .15s;
   }
-  .lang button.on{background:var(--ink);color:#0a0a0c;font-weight:600}
+  .lang button:hover, .lang a:hover{color:var(--ink)}
+  .lang button.on, .lang a.on{background:var(--ink);color:#0a0a0c;font-weight:600}
   .lang .ar-btn{font-family:var(--arabic);font-size:14px}
 
   /* ─── buttons ─── */
@@ -615,4 +621,76 @@
      gap; mobile just needed the section block padding (above) reduced. */
   @media (max-width:640px){
     .tunnel-demo{margin-top:32px;min-height:280px}
+  }
+
+  /* ─── FAQ ───
+     Native <details>/<summary> for zero JS. Search engines and AI
+     crawlers happily index the answer text whether or not the
+     <details> is open. */
+  .faq{padding-top:40px;text-align:center}
+  .faq .sect{max-width:760px;margin-left:auto;margin-right:auto}
+  .faq-list{
+    margin:48px auto 0;
+    max-width:880px;
+    border-top:1px solid var(--line);
+    text-align:start;  /* questions/answers stay left-aligned in the centered box */
+  }
+  .faq-item{
+    border-bottom:1px solid var(--line);
+    padding:0;
+  }
+  .faq-item > summary{
+    list-style:none;
+    cursor:pointer;
+    padding:22px 40px 22px 4px;
+    font-size:17px;font-weight:600;letter-spacing:-.01em;
+    color:var(--ink);
+    position:relative;
+    transition:color .15s;
+  }
+  .faq-item > summary::-webkit-details-marker{display:none}
+  .faq-item > summary:hover{color:var(--amber)}
+  .faq-item > summary::after{
+    content:"";
+    position:absolute;
+    inset-inline-end:8px;top:50%;
+    width:12px;height:12px;
+    border-right:1.5px solid var(--ink-dim);
+    border-bottom:1.5px solid var(--ink-dim);
+    transform:translateY(-70%) rotate(45deg);
+    transition:transform .2s;
+  }
+  .faq-item[open] > summary::after{
+    transform:translateY(-30%) rotate(-135deg);
+    border-color:var(--amber);
+  }
+  .faq-a{
+    padding:0 4px 22px;
+    color:var(--ink-dim);
+    font-size:15.5px;line-height:1.65;
+    max-width:760px;
+  }
+  .faq-a code{
+    font-family:var(--mono);
+    background:rgba(232,228,218,.06);
+    border:1px solid var(--line);
+    padding:1.5px 6px;border-radius:5px;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .faq-more{
+    margin-top:36px;
+    color:var(--ink-dim);
+    font-size:14px;
+    text-align:center;
+  }
+  .faq-more a{
+    color:var(--amber);
+    border-bottom:1px solid rgba(184,255,92,.3);
+    transition:border-color .15s;
+  }
+  .faq-more a:hover{border-bottom-color:var(--amber)}
+  @media (max-width:640px){
+    .faq-item > summary{padding:18px 32px 18px 4px;font-size:15.5px}
+    .faq-a{font-size:14.5px;padding-bottom:18px}
   }

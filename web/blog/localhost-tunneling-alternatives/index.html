@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a0a0c" />
+
+<title>Free ngrok alternatives for localhost tunneling on macOS — Manfath</title>
+<meta name="description" content="Cloudflare Tunnel, localhost.run, bore, tailscale-funnel — what each tool does well, what it costs, and when to pick which for sharing a localhost server." />
+<meta name="keywords" content="free ngrok alternative, localhost tunnel, cloudflared, cloudflare tunnel, tailscale funnel, localhost.run, bore, expose localhost, share localhost mac" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Manfath" />
+
+<link rel="canonical" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+<link rel="alternate" hreflang="en" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+<link rel="alternate" hreflang="ar" href="https://manfath.dev/blog/ar/localhost-tunneling-alternatives/" />
+<link rel="alternate" hreflang="x-default" href="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Manfath" />
+<meta property="og:title" content="Free ngrok alternatives for localhost tunneling on macOS" />
+<meta property="og:description" content="A side-by-side look at Cloudflare Tunnel, localhost.run, bore, and tailscale-funnel — what each does well and when to pick which." />
+<meta property="og:url" content="https://manfath.dev/blog/localhost-tunneling-alternatives/" />
+<meta property="og:image" content="https://manfath.dev/assets/og.png" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="ar_SA" />
+<meta property="article:published_time" content="2026-04-26T00:00:00Z" />
+<meta property="article:modified_time" content="2026-04-26T00:00:00Z" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://manfath.dev/blog/localhost-tunneling-alternatives/#post",
+      "headline": "Free ngrok alternatives for localhost tunneling on macOS",
+      "description": "A side-by-side look at Cloudflare Tunnel, localhost.run, bore, and tailscale-funnel — what each does well and when to pick which.",
+      "url": "https://manfath.dev/blog/localhost-tunneling-alternatives/",
+      "datePublished": "2026-04-26",
+      "dateModified": "2026-04-26",
+      "inLanguage": "en",
+      "image": "https://manfath.dev/assets/og.png",
+      "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Manfath",
+        "url": "https://manfath.dev/",
+        "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
+      },
+      "mainEntityOfPage": "https://manfath.dev/blog/localhost-tunneling-alternatives/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://manfath.dev/blog/" },
+        { "@type": "ListItem", "position": 3, "name": "Free ngrok alternatives", "item": "https://manfath.dev/blog/localhost-tunneling-alternatives/" }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/styles.css" />
+<link rel="stylesheet" href="/assets/css/blog.css" />
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <a class="brand" href="/">
+    <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="6" width="19" height="12" rx="2" stroke="#e8e4da" stroke-width="1.5"/>
+      <rect x="5.5" y="9" width="13" height="6" rx="1" fill="#0a0a0c" stroke="#b8ff5c" stroke-width="1"/>
+      <rect x="7" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="9" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="11" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="13" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <rect x="15" y="10.5" width="1" height="3" fill="#d9b26a"/>
+      <circle cx="19.2" cy="7.6" r=".9" fill="#b8ff5c"/>
+    </svg>
+    <span class="brand-name">Manfath</span>
+  </a>
+  <div class="nav-links">
+    <a href="/" class="hide-sm">Home</a>
+    <a href="/blog/" class="hide-sm">Blog</a>
+    <a href="/#download" class="hide-sm">Download</a>
+    <div class="lang" role="group" aria-label="Language">
+      <a id="lang-en" class="on" href="/blog/localhost-tunneling-alternatives/" aria-current="page">EN</a>
+      <a id="lang-ar" class="ar-btn" href="/blog/ar/localhost-tunneling-alternatives/">ع</a>
+    </div>
+  </div>
+</nav>
+
+<main class="blog-shell">
+  <div class="blog-crumbs">
+    <a href="/">Manfath</a>
+    <span class="sep">/</span>
+    <a href="/blog/">Blog</a>
+    <span class="sep">/</span>
+    <span>Free ngrok alternatives</span>
+  </div>
+
+  <article class="post">
+    <div class="post-meta">Comparison · 2026-04-26 · 8 min read</div>
+    <h1>Free ngrok alternatives for localhost tunneling</h1>
+    <p class="lede">You need to share a local dev server with a teammate, a client, your phone, or a webhook provider — and ngrok's free tier just bounced you off the random-URL-every-restart hump. Here are four free alternatives that earn their keep, with the tradeoffs that decide which one fits your situation.</p>
+
+    <h2>The shortlist</h2>
+    <p>The honest one-line summaries:</p>
+    <table>
+      <thead><tr><th>Tool</th><th>Free</th><th>Custom domain</th><th>TCP support</th><th>Auth required</th></tr></thead>
+      <tbody>
+        <tr><td>Cloudflare Tunnel</td><td>Yes — unlimited</td><td>Yes (your domain)</td><td>Limited</td><td>Cloudflare account</td></tr>
+        <tr><td>localhost.run</td><td>Yes — random URL</td><td>Paid only</td><td>HTTP/HTTPS only</td><td>None (SSH key)</td></tr>
+        <tr><td>bore</td><td>Yes — self-hostable</td><td>If you self-host</td><td>Yes (raw TCP)</td><td>None</td></tr>
+        <tr><td>tailscale-funnel</td><td>Yes (3 funnels)</td><td>Tailscale subdomain</td><td>HTTPS only</td><td>Tailscale account</td></tr>
+        <tr><td>ngrok (free)</td><td>Yes</td><td>No</td><td>Yes (with limits)</td><td>ngrok account</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Cloudflare Tunnel — the default for most people</h2>
+    <p>Cloudflare Tunnel (the daemon is <code>cloudflared</code>) is the strongest free option in 2026. It's free, unlimited, supports custom domains if you have one on Cloudflare, and runs as a long-lived daemon you can leave on.</p>
+    <p>The 30-second sharable URL form (no account, no domain) is one command:</p>
+    <pre><code>brew install cloudflared
+cloudflared tunnel --url http://localhost:3000</code></pre>
+    <p>Output:</p>
+    <pre><code>Your quick Tunnel has been created! Visit it at:
+  https://random-words-here.trycloudflare.com</code></pre>
+    <p>The URL changes each restart. If you want a stable URL on your own domain, the named-tunnel flow is a one-time 5-minute setup.</p>
+    <p><strong>Pick Cloudflare when:</strong> you want a free default that scales from "share a link in five seconds" to "production-grade tunnel on my own domain" without changing tools.</p>
+
+    <h2>localhost.run — zero-install with just SSH</h2>
+    <p>If you don't want to install <em>anything</em>, localhost.run is the answer. It uses SSH, which is preinstalled on macOS:</p>
+    <pre><code>ssh -R 80:localhost:3000 nokey@localhost.run</code></pre>
+    <p>You'll get a random <code>*.lhr.life</code> URL. Free tier is HTTP/HTTPS only and the URL is ephemeral.</p>
+    <p><strong>Pick localhost.run when:</strong> you're on someone else's machine, can't install software, and just need the URL once.</p>
+
+    <h2>bore — minimal and self-hostable</h2>
+    <p><a href="https://github.com/ekzhang/bore" target="_blank" rel="noopener">bore</a> is a tiny Rust tunnel server. The hosted instance is free; you can also run your own on a $5 VPS in five minutes.</p>
+    <pre><code>brew install bore-cli
+bore local 3000 --to bore.pub</code></pre>
+    <p>Unlike the HTTP-only options, bore tunnels raw TCP, which means it works for things like Postgres, Redis, or SSH itself.</p>
+    <p><strong>Pick bore when:</strong> you need TCP (not just HTTP), or you want to run your own tunnel server with no fuss.</p>
+
+    <h2>tailscale-funnel — the right pick if you're already on Tailscale</h2>
+    <p>If you already have Tailscale set up, <code>tailscale funnel</code> exposes any local HTTPS service to the public internet on your <code>*.ts.net</code> subdomain. It's free (3 funnels per account) and stable across restarts.</p>
+    <pre><code>tailscale funnel 3000</code></pre>
+    <p>The URL stays the same forever, which is great for webhook endpoints during dev.</p>
+    <p><strong>Pick tailscale-funnel when:</strong> you're already a Tailscale user and want a stable, no-extra-tool URL.</p>
+
+    <h2>What about ngrok itself?</h2>
+    <p>ngrok's free tier still works for quick demos. The catches in 2026:</p>
+    <ul>
+      <li>URL is random and changes per restart unless you upgrade.</li>
+      <li>Bandwidth and request limits.</li>
+      <li>Inspector and replay are paid features now.</li>
+    </ul>
+    <p>If you need exactly the ngrok feature set (interactive request inspector, replay), it's still worth its tier. For "I just need a URL," any of the four above is simpler.</p>
+
+    <div class="post-cta">
+      <div class="h">Tunnel from the menu bar.</div>
+      <div class="b">Manfath has Cloudflare and ngrok built in. Pick a port, click Tunnel, the public URL lands in your clipboard. Add your own provider command in seconds.</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="/#download">Download Manfath</a>
+        <a class="btn btn-ghost" href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+
+    <h2>Decision flow</h2>
+    <ul>
+      <li><strong>Sharing an HTTP/HTTPS dev server with a teammate?</strong> Cloudflare Tunnel.</li>
+      <li><strong>One-off, can't install anything?</strong> localhost.run via SSH.</li>
+      <li><strong>Need raw TCP (Postgres, Redis, SSH)?</strong> bore.</li>
+      <li><strong>Already on Tailscale and want a stable URL?</strong> tailscale-funnel.</li>
+      <li><strong>Specifically want ngrok's request inspector?</strong> Stay with ngrok.</li>
+    </ul>
+
+    <h2>Security caveats — read this once</h2>
+    <p>Every option here exposes a process running on your laptop to the internet. That means:</p>
+    <ul>
+      <li>Don't tunnel your <code>.env</code> file's secrets along with the app. Many dev servers serve <code>/static/</code> liberally.</li>
+      <li>If your app does file writes, scope them. A hostile request can fill your disk before you notice.</li>
+      <li>Tear the tunnel down when you're done. Several of these tools auto-expire; some don't.</li>
+    </ul>
+    <p>Manfath shows active tunnels in its menu bar so you can see at a glance what's still exposed.</p>
+
+    <hr>
+
+    <div class="post-foot">
+      <div class="h">Read next</div>
+      <ul>
+        <li><a href="/blog/find-process-on-port-macos/">How to find what process is using a port on macOS</a></li>
+        <li><a href="/blog/port-already-in-use-macos/">Fix "port already in use" (EADDRINUSE) on macOS</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="marks">
+    <span class="en">Manfath</span>
+    <span class="sep">/</span>
+    <span class="ar">منفذ</span>
+  </div>
+  <div class="links">
+    <a href="https://github.com/Dnymte/manfath" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.05-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.28 0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+      <span>GitHub</span>
+    </a>
+    <a href="https://github.com/Dnymte/manfath/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+  </div>
+</footer>
+
+</body>
+</html>
