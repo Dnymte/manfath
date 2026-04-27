@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#0a0a0c" />
 
-<title>How to find what process is using a port on macOS — Manfath</title>
-<meta name="description" content="Three reliable ways to find which process is listening on a port on macOS — lsof, netstat, and a one-click GUI. With copy-paste commands and gotchas." />
-<meta name="keywords" content="macOS, find process on port, lsof port, what is using port 3000, netstat mac, port to PID, listening ports macOS" />
+<title>How to find a port on Mac Terminal (lsof, netstat) — Manfath</title>
+<meta name="description" content="How to find what's running on a port from the Mac Terminal — copy-paste lsof and netstat commands, the right flags, and the gotchas. Works on every macOS version." />
+<meta name="keywords" content="how to find a port on mac terminal, find port mac terminal, mac terminal find port, check port mac terminal, lsof port mac, lsof terminal mac, list open ports mac terminal, what is using port 3000 mac, netstat mac terminal, find process on port macOS, port to PID terminal, listening ports macOS terminal, terminal command find port mac, show ports mac terminal" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 <meta name="author" content="Manfath" />
 
@@ -21,8 +21,8 @@
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Manfath" />
-<meta property="og:title" content="How to find what process is using a port on macOS" />
-<meta property="og:description" content="Three reliable ways to map a port back to the process behind it on macOS — with copy-paste commands and gotchas." />
+<meta property="og:title" content="How to find a port on Mac Terminal (lsof, netstat)" />
+<meta property="og:description" content="Open Terminal on macOS, run one command, get the process behind any port. The lsof and netstat recipes that actually work — with the gotchas." />
 <meta property="og:url" content="https://manfath.dev/blog/find-process-on-port-macos/" />
 <meta property="og:image" content="https://manfath.dev/assets/og.png" />
 <meta property="og:locale" content="en_US" />
@@ -39,11 +39,12 @@
     {
       "@type": "BlogPosting",
       "@id": "https://manfath.dev/blog/find-process-on-port-macos/#post",
-      "headline": "How to find what process is using a port on macOS",
-      "description": "Three reliable ways to map a port back to the process behind it on macOS — lsof, netstat, and a one-click GUI.",
+      "headline": "How to find a port on Mac Terminal (lsof, netstat)",
+      "alternativeHeadline": "How to find what process is using a port on macOS from the Terminal",
+      "description": "Find what's running on a port from the Mac Terminal in one command. Copy-paste lsof and netstat recipes for macOS, plus the gotchas.",
       "url": "https://manfath.dev/blog/find-process-on-port-macos/",
       "datePublished": "2026-04-26",
-      "dateModified": "2026-04-26",
+      "dateModified": "2026-04-27",
       "inLanguage": "en",
       "image": "https://manfath.dev/assets/og.png",
       "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
@@ -54,36 +55,87 @@
         "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
       },
       "mainEntityOfPage": "https://manfath.dev/blog/find-process-on-port-macos/",
-      "keywords": "macOS, lsof, ports, process, PID, netstat, listening ports"
+      "about": [
+        { "@type": "Thing", "name": "macOS Terminal" },
+        { "@type": "SoftwareApplication", "name": "lsof" },
+        { "@type": "SoftwareApplication", "name": "netstat" }
+      ],
+      "keywords": "how to find a port on mac terminal, find port mac terminal, lsof port mac, netstat mac terminal, mac terminal find port, list open ports mac, port to PID terminal"
     },
     {
       "@type": "HowTo",
-      "name": "Find the process using a port on macOS",
+      "name": "How to find a port on Mac Terminal",
+      "description": "Step-by-step: open Terminal on macOS and use lsof to find which process is listening on a given port.",
       "totalTime": "PT1M",
       "tool": [
-        { "@type": "HowToTool", "name": "Terminal" },
+        { "@type": "HowToTool", "name": "macOS Terminal (Terminal.app)" },
         { "@type": "HowToTool", "name": "lsof (preinstalled on macOS)" }
       ],
       "step": [
         {
           "@type": "HowToStep",
-          "name": "Open Terminal",
-          "text": "Open Terminal.app (Applications → Utilities) or any terminal you prefer."
+          "name": "Open the Mac Terminal",
+          "text": "Press Cmd+Space, type 'Terminal', and press Return — or open Applications → Utilities → Terminal.app. Any terminal emulator (iTerm2, Warp, Ghostty) works the same way."
         },
         {
           "@type": "HowToStep",
-          "name": "Run lsof for the port",
-          "text": "Run: lsof -nP -iTCP:3000 -sTCP:LISTEN — replace 3000 with the port you care about."
+          "name": "Run lsof against the port",
+          "text": "In the Terminal, run: lsof -nP -iTCP:3000 -sTCP:LISTEN — replace 3000 with the port you want to inspect."
         },
         {
           "@type": "HowToStep",
           "name": "Read the PID column",
-          "text": "The second column (PID) is the process ID. The COMMAND column is the executable name."
+          "text": "The second column (PID) is the process ID holding the port. The COMMAND column is the executable name."
         },
         {
           "@type": "HowToStep",
-          "name": "(Optional) Identify the parent process",
-          "text": "Run: ps -o pid,ppid,command -p <PID> to see the parent and full command line."
+          "name": "(Optional) Inspect the process",
+          "text": "Run: ps -o pid,ppid,command -p <PID> in the Terminal to see the parent process and full command line."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I find a port on Mac Terminal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Open Terminal on your Mac (Cmd+Space → 'Terminal') and run: lsof -nP -iTCP:3000 -sTCP:LISTEN. Replace 3000 with the port you want. The PID column shows the process ID and the COMMAND column shows the program name. lsof is preinstalled on every macOS version, so no setup is required."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Terminal command to find what's running on a port on Mac?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "lsof -i :PORT is the shortest form. For listening sockets only, use lsof -nP -iTCP:PORT -sTCP:LISTEN. For just the PID (useful for scripting): lsof -ti :PORT."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I list all open ports on Mac from the Terminal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run lsof -nP -iTCP -sTCP:LISTEN to list every TCP port currently listening, with the process behind each. Add | sort to keep the output stable, or pipe to grep to filter."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Mac have netstat in the Terminal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. macOS ships with a BSD-flavored netstat. To list listening sockets: netstat -anv -p tcp | grep LISTEN. It does not show process names — for port-to-PID mapping, use lsof instead."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does lsof return nothing for my port in Terminal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Three usual reasons: the server isn't actually running, it's bound to UDP not TCP (drop the TCP qualifier and try again), or it was started under a different user — try sudo lsof -i :PORT."
+          }
         }
       ]
     },
@@ -138,16 +190,21 @@
     <span class="sep">/</span>
     <a href="/blog/">Blog</a>
     <span class="sep">/</span>
-    <span>Find process on port</span>
+    <span>Find a port on Mac Terminal</span>
   </div>
 
   <article class="post">
     <div class="post-meta">Tutorial · 2026-04-26 · 6 min read</div>
-    <h1>How to find what process is using a port on macOS</h1>
-    <p class="lede">You hit <code>npm run dev</code>, see <em>"port 3000 already in use"</em>, and now you need to know who's holding it. Here are the three reliable ways to map a port back to a process on macOS — and which one to reach for in which situation.</p>
+    <h1>How to find a port on Mac Terminal</h1>
+    <p class="lede">You hit <code>npm run dev</code>, see <em>"port 3000 already in use"</em>, and now you need to know who's holding it — from the Mac Terminal. Here are the three reliable terminal commands for mapping a port back to a process on macOS, and which one to reach for in which situation.</p>
+
+    <h2>How do I find a port on Mac Terminal?</h2>
+    <p>Open <strong>Terminal</strong> (Cmd+Space → "Terminal" → Return) and run a single command:</p>
+    <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
+    <p>Replace <code>3000</code> with the port you want. The <code>PID</code> column is the process ID. The <code>COMMAND</code> column is the program name. <code>lsof</code> is preinstalled on every macOS version — no Homebrew, no <code>npm install</code>, no setup.</p>
 
     <h2>The short answer</h2>
-    <p>Open Terminal and run:</p>
+    <p>In the Mac Terminal, run:</p>
     <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
     <p>Replace <code>3000</code> with the port you care about. The output looks like this:</p>
     <pre><code>COMMAND    PID    USER   FD   TYPE  DEVICE    NAME

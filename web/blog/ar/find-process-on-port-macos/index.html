@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#0a0a0c" />
 
-<title>كيف تعرف العملية التي تستخدم منفذاً ما على macOS — Manfath</title>
-<meta name="description" content="ثلاث طرق موثوقة لمعرفة العملية المستمعة على منفذ في macOS — lsof و netstat وواجهة بنقرة واحدة. مع أوامر جاهزة للنسخ والمطبّات الشائعة." />
-<meta name="keywords" content="macOS, إيجاد عملية على منفذ, lsof منفذ, ما الذي يستخدم المنفذ 3000, netstat ماك, منفذ إلى PID" />
+<title>كيف أجد المنفذ في الطرفية (الترمنال) على ماك — Manfath</title>
+<meta name="description" content="كيف تعرف المنفذ المستخدم على ماك من الطرفية (الترمنال) بأمر واحد — أوامر lsof و netstat جاهزة للنسخ، مع المطبّات الشائعة. تعمل على كل إصدارات macOS." />
+<meta name="keywords" content="كيف اعرف المنفذ المستخدم في ماك, البحث عن منفذ في الطرفية ماك, البحث عن منفذ في الترمنال, أمر معرفة المنفذ في ماك, lsof ماك, lsof الطرفية, lsof الترمنال, كيف اعرف المنافذ المفتوحة على ماك, عرض المنافذ المستخدمة ماك, netstat ماك, netstat الطرفية, ربط المنفذ بـ PID, terminal mac, الترمنال ماك, الطرفية ماك, التيرمنال ماك" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 <meta name="author" content="Manfath" />
 
@@ -21,8 +21,8 @@
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Manfath" />
-<meta property="og:title" content="كيف تعرف العملية التي تستخدم منفذاً ما على macOS" />
-<meta property="og:description" content="ثلاث طرق موثوقة لربط المنفذ بالعملية المستمعة عليه على macOS." />
+<meta property="og:title" content="كيف أجد المنفذ في الطرفية (الترمنال) على ماك" />
+<meta property="og:description" content="افتح الطرفية على ماك، شغّل أمراً واحداً، واعرف العملية خلف أيّ منفذ. وصفات lsof و netstat الفعّالة — مع المطبّات." />
 <meta property="og:url" content="https://manfath.dev/blog/ar/find-process-on-port-macos/" />
 <meta property="og:image" content="https://manfath.dev/assets/og.png" />
 <meta property="og:locale" content="ar_SA" />
@@ -37,11 +37,12 @@
     {
       "@type": "BlogPosting",
       "@id": "https://manfath.dev/blog/ar/find-process-on-port-macos/#post",
-      "headline": "كيف تعرف العملية التي تستخدم منفذاً ما على macOS",
-      "description": "ثلاث طرق موثوقة لربط المنفذ بالعملية المستخدمة له على macOS — lsof و netstat وواجهة بنقرة واحدة.",
+      "headline": "كيف أجد المنفذ في الطرفية (الترمنال) على ماك",
+      "alternativeHeadline": "إيجاد العملية التي تستخدم منفذاً على macOS من الطرفية",
+      "description": "اعرف المنفذ المستخدم على ماك من الطرفية بأمر واحد — أوامر lsof و netstat جاهزة للنسخ، مع المطبّات الشائعة.",
       "url": "https://manfath.dev/blog/ar/find-process-on-port-macos/",
       "datePublished": "2026-04-26",
-      "dateModified": "2026-04-26",
+      "dateModified": "2026-04-27",
       "inLanguage": "ar",
       "image": "https://manfath.dev/assets/og.png",
       "author": { "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/" },
@@ -49,14 +50,66 @@
         "@type": "Organization", "name": "Manfath", "url": "https://manfath.dev/",
         "logo": { "@type": "ImageObject", "url": "https://manfath.dev/assets/apple-touch-icon.png" }
       },
-      "mainEntityOfPage": "https://manfath.dev/blog/ar/find-process-on-port-macos/"
+      "mainEntityOfPage": "https://manfath.dev/blog/ar/find-process-on-port-macos/",
+      "about": [
+        { "@type": "Thing", "name": "طرفية macOS" },
+        { "@type": "SoftwareApplication", "name": "lsof" },
+        { "@type": "SoftwareApplication", "name": "netstat" }
+      ],
+      "keywords": "كيف اعرف المنفذ المستخدم في ماك, البحث عن منفذ في الطرفية, lsof ماك, netstat ماك, الترمنال ماك"
+    },
+    {
+      "@type": "FAQPage",
+      "inLanguage": "ar",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "كيف أجد المنفذ في الطرفية على ماك؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "افتح الطرفية على ماك (Cmd+Space ثم اكتب «Terminal») وشغّل: lsof -nP -iTCP:3000 -sTCP:LISTEN — استبدل 3000 بالمنفذ الذي تريد. عمود PID هو معرّف العملية وعمود COMMAND هو اسم البرنامج. أداة lsof مثبّتة مسبقاً في كل إصدارات macOS، فلا حاجة لأي إعداد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ما الأمر الذي يعرض المنفذ المستخدم على ماك من الترمنال؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "أبسط صيغة هي: lsof -i :PORT. وللمقابس المستمعة فقط: lsof -nP -iTCP:PORT -sTCP:LISTEN. وللحصول على PID فقط (للسكريبتات): lsof -ti :PORT."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "كيف أعرض كل المنافذ المفتوحة على ماك من الطرفية؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "شغّل: lsof -nP -iTCP -sTCP:LISTEN — يعرض كل منفذ TCP مستمع حالياً مع العملية خلفه. أضف | sort لترتيب الناتج، أو مرّره عبر grep للتصفية."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هل يحتوي ماك على أمر netstat في الطرفية؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "نعم. macOS يأتي بنسخة BSD من netstat. لعرض المقابس المستمعة: netstat -anv -p tcp | grep LISTEN. لكنه لا يُظهر أسماء العمليات — لربط المنفذ بـPID استخدم lsof."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "لماذا لا يُرجِع lsof شيئاً للمنفذ في الطرفية؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ثلاثة أسباب شائعة: الخادم غير مُشغَّل فعلاً، أو يستمع على UDP لا TCP (احذف المُحدِّد TCP وأعد المحاولة)، أو بُدِئ بمستخدم آخر — جرّب: sudo lsof -i :PORT."
+          }
+        }
+      ]
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Manfath", "item": "https://manfath.dev/" },
         { "@type": "ListItem", "position": 2, "name": "المدوّنة", "item": "https://manfath.dev/blog/ar/" },
-        { "@type": "ListItem", "position": 3, "name": "إيجاد عملية على منفذ", "item": "https://manfath.dev/blog/ar/find-process-on-port-macos/" }
+        { "@type": "ListItem", "position": 3, "name": "إيجاد المنفذ في الطرفية على ماك", "item": "https://manfath.dev/blog/ar/find-process-on-port-macos/" }
       ]
     }
   ]
@@ -102,16 +155,21 @@
     <span class="sep">/</span>
     <a href="/blog/ar/">المدوّنة</a>
     <span class="sep">/</span>
-    <span>إيجاد عملية على منفذ</span>
+    <span>إيجاد المنفذ في الطرفية على ماك</span>
   </div>
 
   <article class="post">
     <div class="post-meta">درس · 2026-04-26 · 6 دقائق قراءة</div>
-    <h1>كيف تعرف العملية التي تستخدم منفذاً ما على macOS</h1>
-    <p class="lede">شغّلت <code>npm run dev</code> فوجدت رسالة <em>«المنفذ 3000 قيد الاستخدام»</em>، وتحتاج معرفة من يمسك به. إليك ثلاث طرق موثوقة لربط المنفذ بالعملية على macOS — وأيّها تختار في كل موقف.</p>
+    <h1>كيف أجد المنفذ في الطرفية (الترمنال) على ماك</h1>
+    <p class="lede">شغّلت <code>npm run dev</code> فظهرت رسالة <em>«المنفذ 3000 قيد الاستخدام»</em>، وتحتاج معرفة من يمسك به — من <strong>الطرفية</strong> (الترمنال). إليك ثلاثة أوامر موثوقة في طرفية ماك لربط المنفذ بالعملية على macOS، وأيّها تختار في كل موقف.</p>
+
+    <h2>كيف أجد المنفذ في الطرفية على ماك؟</h2>
+    <p>افتح <strong>الطرفية</strong> (Cmd+Space ثم اكتب «Terminal» واضغط Return) وشغّل أمراً واحداً:</p>
+    <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
+    <p>استبدل <code>3000</code> بالمنفذ المطلوب. عمود <code>PID</code> هو معرّف العملية، وعمود <code>COMMAND</code> هو اسم البرنامج. أداة <code>lsof</code> مثبّتة مسبقاً في كل إصدارات macOS — لا حاجة لـHomebrew أو <code>npm install</code> أو أيّ إعداد.</p>
 
     <h2>الإجابة المختصرة</h2>
-    <p>افتح الطرفية وشغّل:</p>
+    <p>في طرفية ماك، شغّل:</p>
     <pre><code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code></pre>
     <p>استبدل <code>3000</code> بالمنفذ المطلوب. ستبدو المخرجات هكذا:</p>
     <pre><code>COMMAND    PID    USER   FD   TYPE  DEVICE    NAME

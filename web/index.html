@@ -7,7 +7,7 @@
 
 <title id="docTitle">Manfath — See every port. Kill what you don't need. Share the rest.</title>
 <meta id="metaDesc" name="description" content="Free, open-source macOS menu bar app that shows every localhost port — scan, kill, and tunnel in one click. No accounts, no telemetry." />
-<meta name="keywords" content="macOS, menu bar, localhost, ports, lsof, tunnel, ngrok, cloudflared, developer tools, open source, EADDRINUSE, port already in use, kill process on port, free ngrok alternative" />
+<meta name="keywords" content="how to find a port on mac terminal, find port mac terminal, lsof mac terminal, macOS, menu bar, localhost, ports, lsof, tunnel, ngrok, cloudflared, developer tools, open source, EADDRINUSE, port already in use, kill process on port, free ngrok alternative" />
 <meta name="author" content="Manfath contributors" />
 <meta name="application-name" content="Manfath" />
 <meta name="apple-mobile-web-app-title" content="Manfath" />
@@ -121,10 +121,10 @@
         },
         {
           "@type": "Question",
-          "name": "How do I find what process is using a port on macOS?",
+          "name": "How do I find a port on Mac Terminal?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "From the terminal: run `lsof -nP -iTCP:3000 -sTCP:LISTEN` (replace 3000 with your port). The PID column tells you which process owns the port. With Manfath, the same information is one click away in the menu bar — every listening port, sorted by activity, refreshed every 3 seconds."
+            "text": "Open Terminal on your Mac (Cmd+Space → 'Terminal') and run: lsof -nP -iTCP:3000 -sTCP:LISTEN — replace 3000 with the port you want. The PID column tells you which process owns the port; the COMMAND column tells you the program name. lsof is preinstalled on every macOS version. With Manfath, the same information is one click away in the menu bar — every listening port, sorted by activity, refreshed every 3 seconds."
           }
         },
         {
@@ -984,8 +984,8 @@
         <div class="faq-a" data-i18n="faq.a1">Manfath is a free, open-source macOS menu bar app. It lists every listening localhost port on your machine, shows the process and PID behind each one, lets you kill any process with one click, and exposes any local port to the public internet via Cloudflare or ngrok. It runs entirely on your machine — no accounts, no telemetry.</div>
       </details>
       <details class="faq-item">
-        <summary data-i18n="faq.q2">How do I find what's running on port 3000 on macOS?</summary>
-        <div class="faq-a" data-i18n="faq.a2">From the terminal: <code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code>. The PID column tells you which process owns the port. With Manfath, the same answer is in your menu bar — every port, refreshed every 3 seconds, sorted by activity.</div>
+        <summary data-i18n="faq.q2">How do I find a port on Mac Terminal?</summary>
+        <div class="faq-a" data-i18n="faq.a2">Open Terminal (Cmd+Space → "Terminal") and run <code>lsof -nP -iTCP:3000 -sTCP:LISTEN</code> — replace 3000 with the port you want. The PID column tells you which process owns the port. <code>lsof</code> is preinstalled on every macOS version. With Manfath, the same answer is in your menu bar — every port, refreshed every 3 seconds, sorted by activity.</div>
       </details>
       <details class="faq-item">
         <summary data-i18n="faq.q3">How do I kill a process on a port?</summary>
